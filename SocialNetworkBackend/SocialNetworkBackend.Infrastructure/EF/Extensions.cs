@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SocialNetworkBackend.Application.Repositories;
 using SocialNetworkBackend.Infrastructure.EF.Contexts;
 using SocialNetworkBackend.Infrastructure.EF.Options;
+using SocialNetworkBackend.Infrastructure.EF.Repositories;
 using SocialNetworkBackend.Shared.Options;
 
 namespace SocialNetworkBackend.Infrastructure.EF;
@@ -17,7 +19,8 @@ public static class Extensions
         services.AddDbContext<SocialNetworkDbContext>(ctx
             => ctx.UseNpgsql(options.ConnectionString));
 
-        //services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IVerificationTokenRepository, VerificationTokenRepository>();
         return services;
     }
 }

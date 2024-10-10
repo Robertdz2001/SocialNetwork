@@ -10,7 +10,8 @@ namespace SocialNetworkBackend.Infrastructure.EF.Configuration;
 /// </summary>
 public class DbContextConfiguration :
     IEntityTypeConfiguration<User>,
-    IEntityTypeConfiguration<Role>
+    IEntityTypeConfiguration<Role>,
+    IEntityTypeConfiguration<VerificationToken>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -28,6 +29,12 @@ public class DbContextConfiguration :
             .HasKey(x => x.Id);
         builder
             .HasData(GetRoles());
+    }
+
+    public void Configure(EntityTypeBuilder<VerificationToken> builder)
+    {
+        builder
+            .HasKey(x => x.Id);
     }
 
     private IEnumerable<Role> GetRoles()

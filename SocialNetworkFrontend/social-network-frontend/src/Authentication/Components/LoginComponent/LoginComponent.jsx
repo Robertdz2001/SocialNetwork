@@ -1,13 +1,17 @@
 import authClasses from '../../AuthenticationPage.module.scss';
 import { useState, useRef } from "react";
+import axios from "axios";
+import { baseUrl } from '../../../Shared/Options/ApiOptions';
 
 function LoginComponent(props) {
     const emailErrRef = useRef(null);
     const passwordErrRef = useRef(null);
+    const tokenErrRef = useRef(null);
 
     const [IsLoggedIn, setIsLoggedIn] = useState(false);
+    const [EmailAndPassword, setEmailAndPassword] = useState(false);
 
-    const handleLogIn = (e) => {
+    const handleLogIn = async (e) => {
         e.preventDefault();
         const userData = {
             email: e.target.email.value.trim(),
@@ -35,7 +39,38 @@ function LoginComponent(props) {
             passwordErrRef.current.innerHTML = "";
         }
 
-        setIsLoggedIn(true);
+        try {
+
+            await axios.post(`${baseUrl}/user/login`, userData);
+            setEmailAndPassword(userData);
+            setIsLoggedIn(true);
+          } catch (err) {
+
+            if (err.response && err.response.data) {
+                emailErrRef.current.innerHTML = err.response.data;
+            }
+          }
+    };
+
+    const handleVerify = async (e) => {
+        e.preventDefault();
+        const data = {
+            email: EmailAndPassword.email,
+            password: EmailAndPassword.password,
+            token: e.target.token.value
+        };
+
+        try {
+
+            const response = await axios.post(`${baseUrl}/user/verify-login`, data);
+            localStorage.setItem("token", response.data.token);
+            alert("You are logged in");
+
+          } catch (err) {
+            if (err.response && err.response.data) {
+                tokenErrRef.current.innerHTML = err.response.data;
+            }
+          }
     };
 
     const handleCancel = (e) => {
@@ -79,10 +114,11 @@ function LoginComponent(props) {
             {IsLoggedIn && (
                 <>
                     <h2 className={authClasses['auth-header']}>Email verification</h2>
-                    <form className={authClasses['auth-form']}>
+                    <form onSubmit={handleVerify} className={authClasses['auth-form']}>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="token">We have sent a verification token to the provided email. Token will expire in 5 minutes.</label>
                             <input className={authClasses['auth-input']} type="number" id="token" name="token" placeholder="Enter token" />
+                            <span ref={tokenErrRef} className={authClasses['auth-error-message']}></span>
                         </div>
                         <div className='row justify-content-between'>
                             <div className='col-5'>
@@ -91,7 +127,7 @@ function LoginComponent(props) {
                                 </button>
                             </div>
                             <div className='col-5'>
-                                <button type='submit' onClick={handleLogIn} className={authClasses['auth-primary-btn']}>
+                                <button type='submit' className={authClasses['auth-primary-btn']}>
                                     Verify
                                 </button>
                             </div>

@@ -14,8 +14,6 @@
   <ItemGroup>
     <Folder Include="Hubs\" />
     <Folder Include="Pagination\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Requests\" />
   </ItemGroup>
 
   <ItemGroup>

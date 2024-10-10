@@ -1,24 +1,22 @@
-﻿namespace SocialNetworkBackend.Domain.Entities;
+﻿using MediatR;
 
-public class User
+namespace SocialNetworkBackend.Application.Requests.UserRequests.RegisterUser;
+
+public class RegisterUserRequest : IRequest
 {
-    public long Id { get; set; }
-
     public required string Email { get; set; }
 
     public required string FirstName { get; set; }
 
     public required string LastName { get; set; }
 
+    public required string Token { get; set; }
+
+    public required string Password { get; set; }
+
     public string? PhoneNumber { get; set; }
 
     public string? Country { get; set; }
 
     public string? City { get; set; }
-
-    public Role Role { get; set; }
-
-    public long RoleId { get; set; }
-
-    public string PasswordHash { get; set; }
 }

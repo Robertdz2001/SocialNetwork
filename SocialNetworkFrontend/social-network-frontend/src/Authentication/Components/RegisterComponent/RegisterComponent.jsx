@@ -1,13 +1,16 @@
 import authClasses from '../../AuthenticationPage.module.scss';
 import { useState, useRef } from "react";
+import axios from "axios";
+import { baseUrl } from '../../../Shared/Options/ApiOptions';
 
 function RegisterComponent(props) {
     const emailErrRef = useRef(null);
-    const passwordErrRef = useRef(null);
+    const tokenErrRef = useRef(null);
 
     const [IsVerified, setIsVerified] = useState(false);
+    const [emailState, setEmailState] = useState("");
 
-    const handleVerify = (e) => {
+    const handleVerify = async (e) => {
         e.preventDefault();
         const email = e.target.email.value.trim();
 
@@ -24,11 +27,48 @@ function RegisterComponent(props) {
             emailErrRef.current.innerHTML = "";
         }
 
-        setIsVerified(true);
+        const data = {
+            email: email
+        }
+
+        try {
+            // Register new user
+            await axios.post(`${baseUrl}/user/verify-register`, data);
+            setEmailState(data.email);
+            setIsVerified(true);
+          } catch (err) {
+            // Display backend exeptions
+            if (err.response && err.response.data) {
+              emailErrRef.current.innerHTML = err.response.data;
+            }
+          }
     };
 
-    const handleCreate = (e) => {
+    const handleCreate = async (e) => {
         e.preventDefault();
+
+        const data = {
+            email: emailState,
+            token: e.target.token.value,
+            password: e.target.password.value,
+            firstName: e.target.firstName.value,
+            lastName: e.target.lastName.value,
+            phoneNumber: e.target.phoneNumber.value,
+            country: e.target.country.value,
+            city: e.target.city.value,
+        }
+
+        try {
+            // Register new user
+            await axios.post(`${baseUrl}/user/register`, data);
+            handleLogIn();
+            alert("Account created. You can sign in now.");
+          } catch (err) {
+            // Display backend exeptions
+            if (err.response && err.response.data) {
+              tokenErrRef.current.innerHTML = err.response.data;
+            }
+          }
     };
 
     const handleCancel = (e) => {
@@ -36,7 +76,6 @@ function RegisterComponent(props) {
     };
 
     const handleLogIn = (e) => {
-        e.preventDefault();
         props.changeShowedComponent("Login")
     };
 
@@ -69,10 +108,15 @@ function RegisterComponent(props) {
             {IsVerified && (
                 <>
                     <h2 className={authClasses['auth-header']}>Create account</h2>
-                    <form className={authClasses['auth-form']}>
+                    <form onSubmit={handleCreate} className={authClasses['auth-form']}>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="token">We have sent a verification token to the provided email. Token will expire in 30 minutes.</label>
                             <input className={authClasses['auth-input']} type="number" id="token" name="token" placeholder="Enter token" />
+                            <span ref={tokenErrRef} className={authClasses['auth-error-message']}></span>
+                        </div>
+                        <div className={authClasses['auth-input-group']}>
+                            <label className={authClasses['auth-label']} htmlFor="password">Password</label>
+                            <input className={authClasses['auth-input']} type="text" id="password" name="password" placeholder="Enter password" />
                         </div>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="firstName">First name</label>
@@ -101,7 +145,7 @@ function RegisterComponent(props) {
                                 </button>
                             </div>
                             <div className='col-5'>
-                                <button type='submit' onClick={handleCreate} className={authClasses['auth-primary-btn']}>
+                                <button type='submit' className={authClasses['auth-primary-btn']}>
                                     Verify and Create
                                 </button>
                             </div>
