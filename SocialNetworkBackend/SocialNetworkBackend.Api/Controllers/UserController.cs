@@ -1,8 +1,11 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetworkBackend.Application.Requests.UserRequests.LoginUser;
+using SocialNetworkBackend.Application.Requests.UserRequests.PasswordReset;
 using SocialNetworkBackend.Application.Requests.UserRequests.RegisterUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyLoginUser;
+using SocialNetworkBackend.Application.Requests.UserRequests.VerifyPasswordReset;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyRegisterUser;
 
 namespace SocialNetworkBackend.Api.Controllers;
@@ -38,6 +41,15 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
     {
+        var validator = new RegisterUserRequestValidator();
+
+        var validationResult = validator.Validate(request);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors[0].ErrorMessage);
+        }
+
         await _mediator.Send(request);
         return Ok();
     }
@@ -64,5 +76,38 @@ public class UserController : ControllerBase
     {
         var token = await _mediator.Send(request);
         return Ok(token);
+    }
+
+    /// <summary>
+    /// Checks token during resetting password.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("verify-password-reset")]
+    public async Task<IActionResult> VerifyPasswordReset(VerifyPasswordResetRequest request)
+    {
+        await _mediator.Send(request);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Resets password.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("password-reset")]
+    public async Task<IActionResult> PasswordReset(PasswordResetRequest request)
+    {
+        var validator = new PasswordResetRequestValidator();
+
+        var validationResult = validator.Validate(request);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors[0].ErrorMessage);
+        }
+
+        await _mediator.Send(request);
+        return Ok();
     }
 }

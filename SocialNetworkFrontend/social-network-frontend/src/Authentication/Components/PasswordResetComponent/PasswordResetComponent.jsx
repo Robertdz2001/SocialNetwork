@@ -3,13 +3,10 @@ import { useState, useRef } from "react";
 import axios from "axios";
 import { baseUrl } from '../../../Shared/Options/ApiOptions';
 
-function RegisterComponent(props) {
+function PasswordResetComponent(props) {
     const emailErrRef = useRef(null);
     const tokenErrRef = useRef(null);
     const passwordErrRef = useRef(null);
-    const firstNameErrRef = useRef(null);
-    const lastNameErrRef = useRef(null);
-    const phoneErrRef = useRef(null);
 
     const [IsVerified, setIsVerified] = useState(false);
     const [emailState, setEmailState] = useState("");
@@ -36,8 +33,7 @@ function RegisterComponent(props) {
         }
 
         try {
-            // Register new user
-            await axios.post(`${baseUrl}/user/verify-register`, data);
+            await axios.post(`${baseUrl}/user/verify-password-reset`, data);
             setEmailState(data.email);
             setIsVerified(true);
         } catch (err) {
@@ -48,24 +44,17 @@ function RegisterComponent(props) {
         }
     };
 
-    const handleCreate = async (e) => {
+    const handleReset = async (e) => {
         e.preventDefault();
 
         const data = {
             email: emailState,
             token: e.target.token.value,
             password: e.target.password.value,
-            firstName: e.target.firstName.value,
-            lastName: e.target.lastName.value,
-            phoneNumber: e.target.phoneNumber.value,
-            country: e.target.country.value,
-            city: e.target.city.value,
         }
 
         // Regex for password validation (minimum 8 characters, one uppercase, one lowercase, one digit, one special character)
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-        // Regex for phone number validation (simple international format)
-        const phoneRegex = /^\+?[1-9]\d{1,14}$/;
 
         let hasErrors = false;
 
@@ -85,41 +74,16 @@ function RegisterComponent(props) {
             passwordErrRef.current.innerHTML = "";
         }
 
-        // Validate first name
-        if (!data.firstName) {
-            firstNameErrRef.current.innerHTML = "First name is required.";
-            hasErrors = true;
-        } else {
-            firstNameErrRef.current.innerHTML = "";
-        }
-
-        // Validate last name
-        if (!data.lastName) {
-            lastNameErrRef.current.innerHTML = "Last name is required.";
-            hasErrors = true;
-        } else {
-            lastNameErrRef.current.innerHTML = "";
-        }
-
-        // Validate phone number
-        if (!phoneRegex.test(data.phoneNumber)) {
-            phoneErrRef.current.innerHTML = "Phone number is invalid. It should be in international format. For example +48123456789";
-            hasErrors = true;
-        } else {
-            phoneErrRef.current.innerHTML = "";
-        }
-
         if (hasErrors) {
             return;
         }
 
         try {
-            // Register new user
-            await axios.post(`${baseUrl}/user/register`, data);
+            await axios.post(`${baseUrl}/user/password-reset`, data);
             handleLogIn();
-            alert("Account created. You can sign in now.");
+            alert("New password was set. You can sign in now.");
         } catch (err) {
-            // Display backend exeptions
+            // Display backend exceptions
             if (err.response && err.response.data) {
                 tokenErrRef.current.innerHTML = err.response.data;
             }
@@ -138,7 +102,7 @@ function RegisterComponent(props) {
         <>
             {!IsVerified && (
                 <>
-                    <h2 className={authClasses['auth-header']}>Sign up</h2>
+                    <h2 className={authClasses['auth-header']}>Reset password</h2>
                     <form onSubmit={handleVerify} className={authClasses['auth-form']}>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="email">Email:</label>
@@ -153,7 +117,7 @@ function RegisterComponent(props) {
                             </div>
                             <div className='col-5'>
                                 <button type='submit' className={authClasses['auth-primary-btn']}>
-                                    Sign up
+                                    Submit
                                 </button>
                             </div>
                         </div>
@@ -162,10 +126,10 @@ function RegisterComponent(props) {
             )}
             {IsVerified && (
                 <>
-                    <h2 className={authClasses['auth-header']}>Create account</h2>
-                    <form onSubmit={handleCreate} className={authClasses['auth-form']}>
+                    <h2 className={authClasses['auth-header']}>Reset password</h2>
+                    <form onSubmit={handleReset} className={authClasses['auth-form']}>
                         <div className={authClasses['auth-input-group']}>
-                            <label className={authClasses['auth-label']} htmlFor="token">We have sent a verification token to the provided email. Token will expire in 30 minutes.</label>
+                            <label className={authClasses['auth-label']} htmlFor="token">We have sent a verification token to the provided email. Token will expire in 5 minutes.</label>
                             <input className={authClasses['auth-input']} type="number" id="token" name="token" placeholder="Enter token" />
                             <span ref={tokenErrRef} className={authClasses['auth-error-message']}></span>
                         </div>
@@ -173,29 +137,6 @@ function RegisterComponent(props) {
                             <label className={authClasses['auth-label']} htmlFor="password">Password</label>
                             <input className={authClasses['auth-input']} type="password" id="password" name="password" placeholder="Enter password" />
                             <span ref={passwordErrRef} className={authClasses['auth-error-message']}></span>
-                        </div>
-                        <div className={authClasses['auth-input-group']}>
-                            <label className={authClasses['auth-label']} htmlFor="firstName">First name</label>
-                            <input className={authClasses['auth-input']} type="text" id="firstName" name="firstName" placeholder="Enter first name" />
-                            <span ref={firstNameErrRef} className={authClasses['auth-error-message']}></span>
-                        </div>
-                        <div className={authClasses['auth-input-group']}>
-                            <label className={authClasses['auth-label']} htmlFor="lastName">Last name</label>
-                            <input className={authClasses['auth-input']} type="text" id="lastName" name="lastName" placeholder="Enter last name" />
-                            <span ref={lastNameErrRef} className={authClasses['auth-error-message']}></span>
-                        </div>
-                        <div className={authClasses['auth-input-group']}>
-                            <label className={authClasses['auth-label']} htmlFor="phoneNumber">Phone number</label>
-                            <input className={authClasses['auth-input']} type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" />
-                            <span ref={phoneErrRef} className={authClasses['auth-error-message']}></span>
-                        </div>
-                        <div className={authClasses['auth-input-group']}>
-                            <label className={authClasses['auth-label']} htmlFor="country">Country</label>
-                            <input className={authClasses['auth-input']} type="text" id="country" name="country" placeholder="Enter country" />
-                        </div>
-                        <div className={authClasses['auth-input-group']}>
-                            <label className={authClasses['auth-label']} htmlFor="city">City</label>
-                            <input className={authClasses['auth-input']} type="text" id="city" name="city" placeholder="Enter city" />
                         </div>
                         <div className='row justify-content-between'>
                             <div className='col-5'>
@@ -205,7 +146,7 @@ function RegisterComponent(props) {
                             </div>
                             <div className='col-5'>
                                 <button type='submit' className={authClasses['auth-primary-btn']}>
-                                    Verify and Create
+                                    Set new password
                                 </button>
                             </div>
                         </div>
@@ -216,4 +157,4 @@ function RegisterComponent(props) {
     );
 }
 
-export default RegisterComponent;  
+export default PasswordResetComponent;  
