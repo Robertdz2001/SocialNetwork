@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace SocialNetworkBackend.Application.Requests.UserRequests.RegisterUser;
 
@@ -19,4 +20,6 @@ public class RegisterUserRequest : IRequest
     public string? Country { get; set; }
 
     public string? City { get; set; }
+
+    public IFormFile? ProfilePicture { get; set; }
 }

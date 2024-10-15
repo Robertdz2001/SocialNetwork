@@ -13,6 +13,8 @@ function RegisterComponent(props) {
 
     const [IsVerified, setIsVerified] = useState(false);
     const [emailState, setEmailState] = useState("");
+    const [profilePicture, setProfilePicture] = useState(null);
+    const [picturePreview, setPicturePreview] = useState(null);
 
     const handleVerify = async (e) => {
         e.preventDefault();
@@ -48,6 +50,14 @@ function RegisterComponent(props) {
         }
     };
 
+    const handleProfilePictureChange = (e) => {
+        const file = e.target.files[0];
+        if (file && (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg")) {
+            setProfilePicture(file);
+            setPicturePreview(URL.createObjectURL(file));  // Podgląd zdjęcia
+        }
+    };
+
     const handleCreate = async (e) => {
         e.preventDefault();
 
@@ -60,6 +70,7 @@ function RegisterComponent(props) {
             phoneNumber: e.target.phoneNumber.value,
             country: e.target.country.value,
             city: e.target.city.value,
+            profilePicture: profilePicture
         }
 
         // Regex for password validation (minimum 8 characters, one uppercase, one lowercase, one digit, one special character)
@@ -115,7 +126,11 @@ function RegisterComponent(props) {
 
         try {
             // Register new user
-            await axios.post(`${baseUrl}/user/register`, data);
+            await axios.post(`${baseUrl}/user/register`, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             handleLogIn();
             alert("Account created. You can sign in now.");
         } catch (err) {
@@ -168,6 +183,11 @@ function RegisterComponent(props) {
                             <label className={authClasses['auth-label']} htmlFor="token">We have sent a verification token to the provided email. Token will expire in 30 minutes.</label>
                             <input className={authClasses['auth-input']} type="number" id="token" name="token" placeholder="Enter token" />
                             <span ref={tokenErrRef} className={authClasses['auth-error-message']}></span>
+                        </div>
+                        <div className={authClasses['auth-input-group']}>
+                            <label className={authClasses['auth-label']} htmlFor="profilePicture">Profile Picture</label>
+                            <input className={authClasses['auth-input']} type="file" accept="image/jpeg,image/png,image/jpg" onChange={handleProfilePictureChange} />
+                            {picturePreview && <img src={picturePreview} alt="Profile Preview" className={authClasses['profile-preview']} />}
                         </div>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="password">Password</label>

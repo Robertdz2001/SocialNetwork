@@ -21,6 +21,7 @@ public static class Extensions
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IVerificationTokenRepository, VerificationTokenRepository>();
+        services.AddScoped<IPhotoRepository, PhotoRepository>();
         return services;
     }
 }

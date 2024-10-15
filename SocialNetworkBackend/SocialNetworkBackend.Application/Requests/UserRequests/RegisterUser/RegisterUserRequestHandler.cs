@@ -60,6 +60,19 @@ public class RegisterUserRequestHandler : IRequestHandler<RegisterUserRequest>
 
         user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
 
+        if (request.ProfilePicture != null)
+        {
+            using var memoryStream = new MemoryStream();
+            await request.ProfilePicture.CopyToAsync(memoryStream);
+            var profilePicture = new Photo
+            {
+                Data = memoryStream.ToArray(),
+                ContentType = request.ProfilePicture.ContentType
+            };
+
+            user.Photo = profilePicture;
+        }
+
         await _userRepository.AddUser(user);
     }
 }

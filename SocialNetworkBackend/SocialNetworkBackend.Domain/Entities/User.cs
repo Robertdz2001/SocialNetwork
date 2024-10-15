@@ -21,4 +21,7 @@ public class User
     public long RoleId { get; set; }
 
     public string PasswordHash { get; set; }
+
+    public long PhotoId { get; set; }
+    public Photo Photo { get; set; }
 }

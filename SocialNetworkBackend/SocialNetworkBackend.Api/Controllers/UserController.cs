@@ -1,12 +1,14 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetProfilePicture;
 using SocialNetworkBackend.Application.Requests.UserRequests.LoginUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.PasswordReset;
 using SocialNetworkBackend.Application.Requests.UserRequests.RegisterUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyLoginUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyPasswordReset;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyRegisterUser;
+using SocialNetworkBackend.Domain.Entities;
 
 namespace SocialNetworkBackend.Api.Controllers;
 
@@ -109,5 +111,19 @@ public class UserController : ControllerBase
 
         await _mediator.Send(request);
         return Ok();
+    }
+
+    /// <summary>
+    /// Gets users profile picture.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    [HttpGet("{userId}/profile-picture")]
+    public async Task<IActionResult> GetProfilePicture([FromRoute] long userId)
+    {
+        var request = new GetProfilePictureRequest { UserId = userId };
+
+        var result = await _mediator.Send(request);
+        return File(result.Data, result.ContentType);
     }
 }

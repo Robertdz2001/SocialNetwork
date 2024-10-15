@@ -11,7 +11,8 @@ namespace SocialNetworkBackend.Infrastructure.EF.Configuration;
 public class DbContextConfiguration :
     IEntityTypeConfiguration<User>,
     IEntityTypeConfiguration<Role>,
-    IEntityTypeConfiguration<VerificationToken>
+    IEntityTypeConfiguration<VerificationToken>,
+    IEntityTypeConfiguration<Photo>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -21,6 +22,10 @@ public class DbContextConfiguration :
             .HasOne(x => x.Role)
             .WithMany()
             .HasForeignKey(x => x.RoleId);
+        builder            
+            .HasOne(u => u.Photo)
+            .WithOne()
+            .HasForeignKey<User>(u => u.PhotoId);
     }
 
     public void Configure(EntityTypeBuilder<Role> builder)
@@ -35,6 +40,16 @@ public class DbContextConfiguration :
     {
         builder
             .HasKey(x => x.Id);
+    }
+
+    public void Configure(EntityTypeBuilder<Photo> builder)
+    {
+        builder
+            .HasKey(x => x.Id);
+        builder
+            .HasOne(x => x.User)
+            .WithOne(x => x.Photo)
+            .HasForeignKey<Photo>(x => x.UserId);
     }
 
     private IEnumerable<Role> GetRoles()
