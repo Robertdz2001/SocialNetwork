@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetProfilePicture;
 using SocialNetworkBackend.Application.Requests.UserRequests.LoginUser;
@@ -125,5 +126,16 @@ public class UserController : ControllerBase
 
         var result = await _mediator.Send(request);
         return File(result.Data, result.ContentType);
+    }
+
+    /// <summary>
+    /// Checks if user is logged in.
+    /// </summary>
+    /// <returns></returns>
+    [Authorize]
+    [HttpGet("is-logged-in")]
+    public IActionResult IsLoggedIn()
+    {
+        return Ok();
     }
 }
