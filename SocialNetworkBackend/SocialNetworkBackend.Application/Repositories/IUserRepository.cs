@@ -1,10 +1,15 @@
-﻿using SocialNetworkBackend.Domain.Entities;
+﻿using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
+using SocialNetworkBackend.Domain.Entities;
 
 namespace SocialNetworkBackend.Application.Repositories;
 
 public interface IUserRepository
 {
     Task<User?> GetUserByEmail(string email);
+
+    Task<User?> GetUserById(long id);
+
+    Task<List<User>> GetUsers(GetUsersRequest request);
 
     Task AddUser(User user);
 

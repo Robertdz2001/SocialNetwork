@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetworkBackend.Application.Repositories;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
 using SocialNetworkBackend.Domain.Entities;
 using SocialNetworkBackend.Infrastructure.EF.Contexts;
 
@@ -17,6 +18,14 @@ public class UserRepository : IUserRepository
         => await _dbContext.Users
             .Include(x => x.Role)
             .FirstOrDefaultAsync(x => x.Email == email);
+
+    public async Task<User?> GetUserById(long id)
+    => await _dbContext.Users
+        .Include(x => x.Role)
+        .FirstOrDefaultAsync(x => x.Id == id);
+
+    public async Task<List<User>> GetUsers(GetUsersRequest request)
+        => await _dbContext.Users.ToListAsync();
 
     public async Task AddUser(User user)
     {

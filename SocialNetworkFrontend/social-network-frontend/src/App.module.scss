@@ -8,16 +8,20 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-y: auto; /* Zapewnia przewijanie na poziomie całej strony */
+  overflow-y: auto;
 }
 
 body {
-  background-color: #E0E0E0 !important;
-  font-family: Arial, sans-serif;
+  background-color: #f3f3f3 !important;
+  font-family: Arial, sans-serif !important;
 }
 
 button {
-  transition: 0.3s ease;
+  transition: 0.5s ease;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
 
 input[type="number"]::-webkit-inner-spin-button,

@@ -7,7 +7,7 @@ namespace SocialNetworkBackend.Application.Services;
 /// </summary>
 public interface IUserContextService
 {
-    Guid? GetUserId();
+    long? GetUserId();
 
     ClaimsPrincipal User { get; }
 }

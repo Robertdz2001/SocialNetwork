@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./Layout";
 import HomePage from "./Home/HomePage";
 import ChatPage from "./Chat/ChatPage";
+import UsersPage from "./Users/UsersPage";
 import './App.module.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AuthenticationPage from "./Authentication/AuthenticationPage";
@@ -50,7 +51,7 @@ function App() {
             )
           }
         />
-        <Route element={<Layout />}>
+        <Route element={<Layout isAuthenticated={isAuthenticated}/>}>
           <Route
             path="/home"
             element={isAuthenticated ? <HomePage /> : <Navigate to="/auth" replace />}
@@ -58,6 +59,10 @@ function App() {
           <Route
             path="/chat"
             element={isAuthenticated ? <ChatPage /> : <Navigate to="/auth" replace />}
+          />
+          <Route
+            path="/users"
+            element={isAuthenticated ? <UsersPage /> : <Navigate to="/auth" replace />}
           />
         </Route>
 

@@ -64,6 +64,7 @@ function LoginComponent(props) {
 
             const response = await axios.post(`${baseUrl}/user/verify-login`, data);
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userId", response.data.userId);
             window.location.reload();
 
           } catch (err) {

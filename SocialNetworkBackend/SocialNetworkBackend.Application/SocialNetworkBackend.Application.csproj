@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Hubs\" />
-    <Folder Include="Pagination\" />
   </ItemGroup>
 
   <ItemGroup>

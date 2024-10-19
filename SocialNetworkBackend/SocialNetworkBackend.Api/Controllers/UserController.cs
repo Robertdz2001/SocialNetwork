@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetProfilePicture;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetUserShortInfo;
 using SocialNetworkBackend.Application.Requests.UserRequests.LoginUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.PasswordReset;
 using SocialNetworkBackend.Application.Requests.UserRequests.RegisterUser;
@@ -137,5 +139,21 @@ public class UserController : ControllerBase
     public IActionResult IsLoggedIn()
     {
         return Ok();
+    }
+
+    [Authorize]
+    [HttpGet("user-short-info")]
+    public async Task<IActionResult> GetUserShortInfo()
+    {
+        var result = await _mediator.Send(new GetUserShortInfoRequest());
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetUsers([FromQuery] GetUsersRequest request)
+    {
+        var result = await _mediator.Send(request);
+        return Ok(result);
     }
 }
