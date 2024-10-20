@@ -1,6 +1,6 @@
-﻿namespace SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
+﻿namespace SocialNetworkBackend.Application.Requests.UserRequests.GetFriendInvites;
 
-public class GetUsersDto
+public class GetFriendInvitesDto
 {
     public long UserId { get; set; }
 
@@ -11,8 +11,4 @@ public class GetUsersDto
     public string? Country { get; set; }
 
     public string? City { get; set; }
-
-    public bool IsFriend { get; set; }
-
-    public bool IsInvited { get; set; }
 }

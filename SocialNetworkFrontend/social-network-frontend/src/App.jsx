@@ -9,6 +9,7 @@ import AuthenticationPage from "./Authentication/AuthenticationPage";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl, authorization } from "./Shared/Options/ApiOptions";
+import FriendInvitesPage from "./FriendInvites/FriendInvitesPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -51,7 +52,7 @@ function App() {
             )
           }
         />
-        <Route element={<Layout isAuthenticated={isAuthenticated}/>}>
+        <Route element={<Layout isAuthenticated={isAuthenticated} />}>
           <Route
             path="/home"
             element={isAuthenticated ? <HomePage /> : <Navigate to="/auth" replace />}
@@ -63,6 +64,10 @@ function App() {
           <Route
             path="/users"
             element={isAuthenticated ? <UsersPage /> : <Navigate to="/auth" replace />}
+          />
+          <Route
+            path="/friend-invites"
+            element={isAuthenticated ? <FriendInvitesPage /> : <Navigate to="/auth" replace />}
           />
         </Route>
 

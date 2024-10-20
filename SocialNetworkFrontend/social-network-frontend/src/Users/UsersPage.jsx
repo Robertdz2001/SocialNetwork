@@ -4,6 +4,7 @@ import ReactPaginate from 'react-paginate';
 import { baseUrl } from '../Shared/Options/ApiOptions';
 import classes from './UsersPage.module.scss';
 import UserComponent from './Components/UserComponent/UserComponent';
+import paginationClasses from '../Shared/pagination.module.scss';
 
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
@@ -16,15 +17,15 @@ const UsersPage = () => {
     city: ''
   });
 
-  const fetchUsers = async (currentPage) => {
+  const fetchUsers = async (currentPage, searchFilters) => {
     try {
       const token = localStorage.getItem('token');
 
       const params = {
-        FirstName: filters.firstName,
-        LastName: filters.lastName,
-        Country: filters.country,
-        City: filters.city,
+        FirstName: searchFilters.firstName,
+        LastName: searchFilters.lastName,
+        Country: searchFilters.country,
+        City: searchFilters.city,
         PageNumber: currentPage,
       };
 
@@ -43,13 +44,22 @@ const UsersPage = () => {
   };
 
   useEffect(() => {
-    fetchUsers(pageNumber);
-  }, [pageNumber]);
+    fetchUsers(pageNumber, filters);
+  }, [pageNumber, filters]);
 
   const handleSearch = (e) => {
     e.preventDefault();
+
+    const newFilters = {
+      firstName: e.target.firstName.value,
+      lastName: e.target.lastName.value,
+      country: e.target.country.value,
+      city: e.target.city.value
+    };
+
+    // Ustaw nowe filtry i resetuj numer strony
+    setFilters(newFilters);
     setPageNumber(1);
-    fetchUsers(1);
   };
 
   const handlePageChange = ({ selected }) => {
@@ -57,69 +67,60 @@ const UsersPage = () => {
     setPageNumber(newPageNumber);
   };
 
-  const handleInputChange = (e) => {
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   return (
     <div>
-      <form onSubmit={handleSearch}>
-        <div className={classes['filter-input-group']}>
-          <input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            className={classes["filter-input"]}
-            value={filters.firstName}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            className={classes["filter-input"]}
-            value={filters.lastName}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="country"
-            placeholder="Country"
-            className={classes["filter-input"]}
-            value={filters.country}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="city"
-            placeholder="City"
-            className={classes["filter-input"]}
-            value={filters.city}
-            onChange={handleInputChange}
-          />
-          <button className={classes["search-button"]} type="submit">Search</button>
+      <form onSubmit={handleSearch} className='d-flex justify-content-center'>
+        <div className={classes["filter-input-group-container"]}>
+          <div className={classes['filter-input-group']}>
+            <input
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              className={classes["filter-input"]}
+            />
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              className={classes["filter-input"]}
+            />
+            <input
+              type="text"
+              name="country"
+              placeholder="Country"
+              className={classes["filter-input"]}
+            />
+            <input
+              type="text"
+              name="city"
+              placeholder="City"
+              className={classes["filter-input"]}
+            />
+          </div>
+          <div className='d-flex justify-content-end'>
+            <button className={classes["search-button"]} type="submit">Search</button>
+          </div>
         </div>
       </form>
-      <div className='d-flex justify-content-center'>
+      <div className='d-flex justify-content-center align-items-center flex-column'>
         {users.map(user => (
           <UserComponent key={user.userId} user={user} />
         ))}
       </div>
       <ReactPaginate
         pageCount={totalPages}
-        pageRangeDisplayed={2}
-        marginPagesDisplayed={2}
+        pageRangeDisplayed={3}
+        marginPagesDisplayed={1}
         onPageChange={handlePageChange}
-        containerClassName={classes.pagination}
-        activeClassName={classes.active}
+        containerClassName={paginationClasses.pagination}
+        activeClassName={paginationClasses.active}
+        breakClassName={paginationClasses.break}
         previousLabel={'<'}
         nextLabel={'>'}
-        previousClassName={classes['pagination-arrow']}
-        nextClassName={classes['pagination-arrow']}
-        pageClassName={classes['pagination-button']}
+        previousClassName={paginationClasses['pagination-arrow']}
+        nextClassName={paginationClasses['pagination-arrow']}
+        pageClassName={paginationClasses['pagination-button']}
+        forcePage={pageNumber - 1}
       />
     </div>
   );

@@ -1,13 +1,41 @@
 .user-item {
     border-radius: 0.5rem;
-    border: #2e7d32 1px solid;
     padding: 0.5rem;
     background-color: white;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    width: 30rem;
+    flex-shrink: 0;
+    position: relative;
 }
+
 .user-profile-picture{
     width: 5rem;
     height: 5rem;
     border: #2e7d32 1px solid;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.user-button {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    transform: translate(-100%, -100%);
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    height: 2rem;
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+        background-color: #388e3c;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    }
 }

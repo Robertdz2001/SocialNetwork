@@ -1,7 +1,8 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SocialNetworkBackend.Application.Requests.UserRequests.AddFriend;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetFriendInvites;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetProfilePicture;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetUserShortInfo;
@@ -11,7 +12,6 @@ using SocialNetworkBackend.Application.Requests.UserRequests.RegisterUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyLoginUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyPasswordReset;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyRegisterUser;
-using SocialNetworkBackend.Domain.Entities;
 
 namespace SocialNetworkBackend.Api.Controllers;
 
@@ -152,6 +152,22 @@ public class UserController : ControllerBase
     [HttpGet]
     [Authorize]
     public async Task<IActionResult> GetUsers([FromQuery] GetUsersRequest request)
+    {
+        var result = await _mediator.Send(request);
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/add-friend")]
+    [Authorize]
+    public async Task<IActionResult> AddFriend([FromRoute] long id)
+    {
+        await _mediator.Send(new AddFriendRequest { UserId = id});
+        return Ok();
+    }
+
+    [HttpGet("friend-invites")]
+    [Authorize]
+    public async Task<IActionResult> GetFriendInvites([FromQuery] GetFriendInvitesRequest request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);

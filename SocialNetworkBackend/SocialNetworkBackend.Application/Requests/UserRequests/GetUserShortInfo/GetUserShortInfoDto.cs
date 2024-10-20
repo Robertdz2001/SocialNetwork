@@ -7,5 +7,4 @@ public class GetUserShortInfoDto
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
-
 }

@@ -29,3 +29,15 @@ input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+@media (max-width: 41rem) {
+  html {
+    font-size: 75%;
+  }
+}
+
+@media (max-width: 30rem) {
+  html {
+    font-size: 55%;
+  }
+}
