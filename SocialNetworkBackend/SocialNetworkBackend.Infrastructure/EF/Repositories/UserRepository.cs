@@ -23,6 +23,11 @@ public class UserRepository : IUserRepository
     public async Task<User?> GetUserById(long id)
     => await _dbContext.Users
         .Include(x => x.Role)
+        .Include(x => x.Friends)
+        .Include(x => x.SentFriendInvites)
+            .ThenInclude(x => x.Receiver)
+        .Include(x => x.ReceivedFriendInvites)
+            .ThenInclude(x => x.Sender)
         .FirstOrDefaultAsync(x => x.Id == id);
 
     public async Task DeleteUser(long id)
@@ -35,8 +40,12 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> GetUsers(GetUsersRequest request)
         => await _dbContext.Users
+        .Include(x => x.Role)
         .Include(x => x.Friends)
-        .Include(x => x.FriendInvites)
+        .Include(x => x.SentFriendInvites)
+            .ThenInclude(x => x.Receiver)
+        .Include(x => x.ReceivedFriendInvites)
+            .ThenInclude(x => x.Sender)
         .ToListAsync();
 
     public async Task AddUser(User user)

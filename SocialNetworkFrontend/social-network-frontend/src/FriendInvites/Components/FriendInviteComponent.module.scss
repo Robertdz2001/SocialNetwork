@@ -1,4 +1,4 @@
-.user-item {
+.friend-invite-item {
     border-radius: 0.5rem;
     padding: 0.5rem;
     background-color: white;
@@ -8,7 +8,7 @@
     position: relative;
 }
 
-.user-profile-picture{
+.friend-invite-profile-picture{
     width: 5rem;
     height: 5rem;
     border: #2e7d32 1px solid;
@@ -16,11 +16,10 @@
     object-fit: cover;
 }
 
-.user-button {
+.friend-invite-button {
     position: absolute;
     top: 100%;
     left: 100%;
-    transform: translate(-100%, -100%);
     color: white;
     border: none;
     padding: 0.75rem;
@@ -35,6 +34,7 @@
 
     &-accept {
         background-color: #4caf50;
+        transform: translate(-100%, -100%);
 
         &:hover {
             background-color: #388e3c;
@@ -42,8 +42,9 @@
         }
     }
 
-    &-delete {
+    &-reject {
         background-color: #ff0000;
+        transform: translate(-210%, -100%);
 
         &:hover {
             background-color: #c50000;

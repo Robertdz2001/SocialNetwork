@@ -25,6 +25,18 @@ public class GetFriendInvitesRequestHandler : IRequestHandler<GetFriendInvitesRe
         var user = await _userRepository.GetUserById(userId)
             ?? throw new NotFoundException("User not found");
 
-        return new PagedResult<GetFriendInvitesDto> ( new List<GetFriendInvitesDto>(), 1, 1, 1 );
+        var pageSize = 5;
+
+        var friendInvites = user.ReceivedFriendInvites.Select(x => new GetFriendInvitesDto
+        {
+            UserId = x.SenderId,
+            FirstName = x.Sender.FirstName,
+            LastName = x.Sender.LastName,
+            Country = x.Sender.Country,
+            City = x.Sender.City,
+            FriendsCount = x.Sender.Friends.Count
+        }).ToList();
+
+        return new PagedResult<GetFriendInvitesDto> (friendInvites, friendInvites.Count, pageSize, request.PageNumber );
     }
 }

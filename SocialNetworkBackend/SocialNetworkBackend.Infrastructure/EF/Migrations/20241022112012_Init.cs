@@ -71,6 +71,32 @@ namespace SocialNetworkBackend.Infrastructure.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FriendInvites",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReceiverId = table.Column<long>(type: "bigint", nullable: false),
+                    SenderId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FriendInvites", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FriendInvites_Users_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FriendInvites_Users_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Photos",
                 columns: table => new
                 {
@@ -92,48 +118,24 @@ namespace SocialNetworkBackend.Infrastructure.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserFriend",
+                name: "UserUser",
                 columns: table => new
                 {
-                    FriendId = table.Column<long>(type: "bigint", nullable: false),
+                    FriendsId = table.Column<long>(type: "bigint", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserFriend", x => new { x.FriendId, x.UserId });
+                    table.PrimaryKey("PK_UserUser", x => new { x.FriendsId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UserFriend_Users_FriendId",
-                        column: x => x.FriendId,
+                        name: "FK_UserUser_Users_FriendsId",
+                        column: x => x.FriendsId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserFriend_Users_UserId",
+                        name: "FK_UserUser_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserInvite",
-                columns: table => new
-                {
-                    ReceiverId = table.Column<long>(type: "bigint", nullable: false),
-                    SenderId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserInvite", x => new { x.ReceiverId, x.SenderId });
-                    table.ForeignKey(
-                        name: "FK_UserInvite_Users_ReceiverId",
-                        column: x => x.ReceiverId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserInvite_Users_SenderId",
-                        column: x => x.SenderId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -186,38 +188,43 @@ namespace SocialNetworkBackend.Infrastructure.EF.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FriendInvites_ReceiverId",
+                table: "FriendInvites",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FriendInvites_SenderId",
+                table: "FriendInvites",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Photos_UserId",
                 table: "Photos",
                 column: "UserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserFriend_UserId",
-                table: "UserFriend",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserInvite_SenderId",
-                table: "UserInvite",
-                column: "SenderId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserUser_UserId",
+                table: "UserUser",
+                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "FriendInvites");
+
+            migrationBuilder.DropTable(
                 name: "Photos");
 
             migrationBuilder.DropTable(
-                name: "UserFriend");
-
-            migrationBuilder.DropTable(
-                name: "UserInvite");
+                name: "UserUser");
 
             migrationBuilder.DropTable(
                 name: "VerificationTokens");

@@ -11,4 +11,6 @@ public class GetFriendInvitesDto
     public string? Country { get; set; }
 
     public string? City { get; set; }
+
+    public long FriendsCount { get; set; }
 }

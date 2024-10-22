@@ -59,10 +59,11 @@ public class GetUsersRequestHandler : IRequestHandler<GetUsersRequest, PagedResu
             Country = x.Country,
             City = x.City,
             IsFriend = loggedUser.Friends.FirstOrDefault(y =>  y.Id == x.Id) is not null,
-            IsInvited = loggedUser.FriendInvites.FirstOrDefault(y =>  y.Id == x.Id) is not null
+            IsInvited = loggedUser.SentFriendInvites.FirstOrDefault(y => y.ReceiverId == x.Id) is not null,
+            FriendsCount = x.Friends.Count
         }).ToList();
 
-        var pagedResult = new PagedResult<GetUsersDto>(usersDto, usersDto.Count(), pageSize, request.PageNumber);
+        var pagedResult = new PagedResult<GetUsersDto>(usersDto, usersDto.Count, pageSize, request.PageNumber);
 
         return pagedResult;
     }

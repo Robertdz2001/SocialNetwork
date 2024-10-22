@@ -13,6 +13,8 @@ public class SocialNetworkDbContext : DbContext
     public DbSet<VerificationToken> VerificationTokens { get; set; }
     public DbSet<Photo> Photos { get; set; }
 
+    public DbSet<FriendInvite> FriendInvites { get; set; }
+
     public SocialNetworkDbContext(DbContextOptions<SocialNetworkDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,5 +25,6 @@ public class SocialNetworkDbContext : DbContext
         modelBuilder.ApplyConfiguration<Role>(configuration);
         modelBuilder.ApplyConfiguration<VerificationToken>(configuration);
         modelBuilder.ApplyConfiguration<Photo>(configuration);
+        modelBuilder.ApplyConfiguration<FriendInvite>(configuration);
     }
 }

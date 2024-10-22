@@ -26,5 +26,6 @@ public class User
     public Photo? Photo { get; set; }
 
     public List<User> Friends { get; set; } = new();
-    public List<User> FriendInvites { get; set; } = new();
+    public List<FriendInvite> SentFriendInvites { get; set; } = new();
+    public List<FriendInvite> ReceivedFriendInvites { get; set; } = new();
 }

@@ -12,7 +12,7 @@ using SocialNetworkBackend.Infrastructure.EF.Contexts;
 namespace SocialNetworkBackend.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(SocialNetworkDbContext))]
-    [Migration("20241020131144_Init")]
+    [Migration("20241022112012_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -24,6 +24,29 @@ namespace SocialNetworkBackend.Infrastructure.EF.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("SocialNetworkBackend.Domain.Entities.FriendInvite", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ReceiverId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SenderId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("FriendInvites");
+                });
 
             modelBuilder.Entity("SocialNetworkBackend.Domain.Entities.Photo", b =>
                 {
@@ -516,34 +539,38 @@ namespace SocialNetworkBackend.Infrastructure.EF.Migrations
                     b.ToTable("VerificationTokens");
                 });
 
-            modelBuilder.Entity("UserFriend", b =>
+            modelBuilder.Entity("UserUser", b =>
                 {
-                    b.Property<long>("FriendId")
+                    b.Property<long>("FriendsId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("FriendId", "UserId");
+                    b.HasKey("FriendsId", "UserId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserFriend");
+                    b.ToTable("UserUser");
                 });
 
-            modelBuilder.Entity("UserInvite", b =>
+            modelBuilder.Entity("SocialNetworkBackend.Domain.Entities.FriendInvite", b =>
                 {
-                    b.Property<long>("ReceiverId")
-                        .HasColumnType("bigint");
+                    b.HasOne("SocialNetworkBackend.Domain.Entities.User", "Receiver")
+                        .WithMany("ReceivedFriendInvites")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Property<long>("SenderId")
-                        .HasColumnType("bigint");
+                    b.HasOne("SocialNetworkBackend.Domain.Entities.User", "Sender")
+                        .WithMany("SentFriendInvites")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasKey("ReceiverId", "SenderId");
+                    b.Navigation("Receiver");
 
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("UserInvite");
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("SocialNetworkBackend.Domain.Entities.Photo", b =>
@@ -567,11 +594,11 @@ namespace SocialNetworkBackend.Infrastructure.EF.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("UserFriend", b =>
+            modelBuilder.Entity("UserUser", b =>
                 {
                     b.HasOne("SocialNetworkBackend.Domain.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("FriendId")
+                        .HasForeignKey("FriendsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -582,24 +609,13 @@ namespace SocialNetworkBackend.Infrastructure.EF.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UserInvite", b =>
-                {
-                    b.HasOne("SocialNetworkBackend.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SocialNetworkBackend.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SocialNetworkBackend.Domain.Entities.User", b =>
                 {
                     b.Navigation("Photo");
+
+                    b.Navigation("ReceivedFriendInvites");
+
+                    b.Navigation("SentFriendInvites");
                 });
 #pragma warning restore 612, 618
         }

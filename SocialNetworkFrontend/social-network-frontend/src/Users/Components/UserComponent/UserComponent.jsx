@@ -27,6 +27,12 @@ const UserComponent = ({ user }) => {
 
     const handleDeleteFriend = async () => {
         try {
+            await axios.put(
+                `${baseUrl}/user/${user.userId}/delete-friend`,
+                null,
+                authorization(localStorage.getItem("token"))
+            );
+            setIsFriend(false);
         } catch (err) {
         }
     }
@@ -44,17 +50,17 @@ const UserComponent = ({ user }) => {
                     {user.city == null ? "No city" : user.city}, {user.country == null ? "No country" : user.country}
                 </div>
                 <div className={fonts["font-green-small"]}>
-                    <FontAwesomeIcon icon={faUser} className={icons.icon} /> 32
+                    <FontAwesomeIcon icon={faUser} className={icons.icon} /> {user.friendsCount}
                 </div>
             </div>
             {isFriend && (
-                <button onClick={handleDeleteFriend} className={classes["user-button"]}>Delete</button>
+                <button onClick={handleDeleteFriend} className={`${classes["user-button"]} ${classes["user-button-delete"]}`}>Delete</button>
             )}
             {isInvited && (
-                <button className={classes["user-button"]}>Invited</button>
+                <button className={`${classes["user-button"]} ${classes["user-button-accept"]}`}>Invited</button>
             )}
             {!isInvited && !isFriend && (
-                <button onClick={handleAddFriend} className={classes["user-button"]}>Add</button>
+                <button onClick={handleAddFriend} className={`${classes["user-button"]} ${classes["user-button-accept"]}`}>Add</button>
             )}
         </div>
     );

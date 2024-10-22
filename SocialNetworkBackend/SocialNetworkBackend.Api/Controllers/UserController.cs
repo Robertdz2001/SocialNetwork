@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetworkBackend.Application.Requests.UserRequests.AddFriend;
+using SocialNetworkBackend.Application.Requests.UserRequests.AnswerFriendInvite;
+using SocialNetworkBackend.Application.Requests.UserRequests.DeleteFriend;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetFriendInvites;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetProfilePicture;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
@@ -171,5 +173,21 @@ public class UserController : ControllerBase
     {
         var result = await _mediator.Send(request);
         return Ok(result);
+    }
+
+    [HttpPut("answer-friend-invite")]
+    [Authorize]
+    public async Task<IActionResult> AnswerFriendInvite(AnswerFriendInviteRequest request)
+    {
+        await _mediator.Send(request);
+        return Ok();
+    }
+
+    [HttpPut("{userId}/delete-friend")]
+    [Authorize]
+    public async Task<IActionResult> DeleteFriend([FromRoute] long userId)
+    {
+        await _mediator.Send(new DeleteFriendRequest {UserId = userId});
+        return Ok();
     }
 }

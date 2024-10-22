@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { baseUrl } from '../Shared/Options/ApiOptions';
-import classes from './FriendInvitesPage.module.scss';
 import paginationClasses from '../Shared/pagination.module.scss';
+import FriendInviteComponent from './Components/FriendInviteComponent';
 
 const FriendInvitesPage = () => {
   const [friendInvites, setFriendInvites] = useState([]);
@@ -46,9 +46,7 @@ const FriendInvitesPage = () => {
       <div className='d-flex justify-content-center'>
         <ul>
         {friendInvites.map(friendInvite => (
-          <li>
-            {friendInvite.firstName}
-          </li>
+          <FriendInviteComponent key={friendInvite.userId} friendInvite={friendInvite} />
         ))}
         </ul>
       </div>

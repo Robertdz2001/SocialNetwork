@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SocialNetworkBackend.Domain.Entities;
 using SocialNetworkBackend.Domain.Enums;
-using System.Reflection.Emit;
 
 namespace SocialNetworkBackend.Infrastructure.EF.Configuration;
 
@@ -13,7 +12,8 @@ public class DbContextConfiguration :
     IEntityTypeConfiguration<User>,
     IEntityTypeConfiguration<Role>,
     IEntityTypeConfiguration<VerificationToken>,
-    IEntityTypeConfiguration<Photo>
+    IEntityTypeConfiguration<Photo>,
+    IEntityTypeConfiguration<FriendInvite>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -33,21 +33,19 @@ public class DbContextConfiguration :
 
         builder
             .HasMany(u => u.Friends)
-            .WithMany()
-            .UsingEntity<Dictionary<string, object>>(
-                "UserFriend",
-                j => j.HasOne<User>().WithMany().HasForeignKey("FriendId").OnDelete(DeleteBehavior.Cascade),
-                j => j.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Cascade)
-            );
+            .WithMany();
 
         builder
-            .HasMany(u => u.FriendInvites)
-            .WithMany()
-            .UsingEntity<Dictionary<string, object>>(
-                "UserInvite",
-                j => j.HasOne<User>().WithMany().HasForeignKey("ReceiverId").OnDelete(DeleteBehavior.Cascade),
-                j => j.HasOne<User>().WithMany().HasForeignKey("SenderId").OnDelete(DeleteBehavior.Cascade)
-            );
+            .HasMany(u => u.SentFriendInvites)
+            .WithOne(x => x.Sender)
+            .HasForeignKey(x => x.SenderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany(u => u.ReceivedFriendInvites)
+            .WithOne(x => x.Receiver)
+            .HasForeignKey(x => x.ReceiverId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     public void Configure(EntityTypeBuilder<Role> builder)
@@ -72,6 +70,22 @@ public class DbContextConfiguration :
             .HasOne(x => x.User)
             .WithOne(x => x.Photo)
             .HasForeignKey<Photo>(x => x.UserId);
+    }
+
+    public void Configure(EntityTypeBuilder<FriendInvite> builder)
+    {
+        builder
+            .HasKey(x => x.Id);
+        builder
+            .HasOne(f => f.Sender)
+            .WithMany(u => u.SentFriendInvites)
+            .HasForeignKey(f => f.SenderId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder
+            .HasOne(f => f.Receiver)
+            .WithMany(u => u.ReceivedFriendInvites)
+            .HasForeignKey(f => f.ReceiverId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private IEnumerable<Role> GetRoles()

@@ -15,4 +15,6 @@ public class GetUsersDto
     public bool IsFriend { get; set; }
 
     public bool IsInvited { get; set; }
+
+    public long FriendsCount { get; set; }
 }
