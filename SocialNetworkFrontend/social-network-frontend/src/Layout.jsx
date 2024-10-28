@@ -5,7 +5,7 @@ import icons from './Shared/icons.module.scss'
 import { baseUrl, authorization } from './Shared/Options/ApiOptions';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { faHouse, faPlus, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faPlus, faRightFromBracket, faUser, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { faRocketchat } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -85,6 +85,14 @@ const Layout = ({ isAuthenticated }) => {
                     </div>
                     <div className='ms-2'>
                         Friend Invites
+                    </div>
+                </Link>
+                <Link to="/mutual-friends" className={`${classes["nav-link"]} d-flex align-item-center`}>
+                    <div>
+                        <FontAwesomeIcon icon={faUserGroup} className={icons.icon} />
+                    </div>
+                    <div className='ms-2'>
+                        Mutual Friends
                     </div>
                 </Link>
             </nav>

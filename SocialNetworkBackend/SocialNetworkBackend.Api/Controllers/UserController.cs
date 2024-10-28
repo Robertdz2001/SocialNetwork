@@ -5,6 +5,7 @@ using SocialNetworkBackend.Application.Requests.UserRequests.AddFriend;
 using SocialNetworkBackend.Application.Requests.UserRequests.AnswerFriendInvite;
 using SocialNetworkBackend.Application.Requests.UserRequests.DeleteFriend;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetFriendInvites;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetMutualFriends;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetProfilePicture;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetUserShortInfo;
@@ -189,5 +190,13 @@ public class UserController : ControllerBase
     {
         await _mediator.Send(new DeleteFriendRequest {UserId = userId});
         return Ok();
+    }
+
+    [HttpGet("mutual-friends")]
+    [Authorize]
+    public async Task<IActionResult> GetMutualFriends([FromQuery] GetMutualFriendsRequest request)
+    {
+        var result = await _mediator.Send(request);
+        return Ok(result);
     }
 }

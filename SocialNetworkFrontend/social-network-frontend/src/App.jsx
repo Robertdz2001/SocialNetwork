@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl, authorization } from "./Shared/Options/ApiOptions";
 import FriendInvitesPage from "./FriendInvites/FriendInvitesPage";
+import MutualFriendsPage from "./MutualFriends/MutualFriendsPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -68,6 +69,10 @@ function App() {
           <Route
             path="/friend-invites"
             element={isAuthenticated ? <FriendInvitesPage /> : <Navigate to="/auth" replace />}
+          />
+          <Route
+            path="/mutual-friends"
+            element={isAuthenticated ? <MutualFriendsPage /> : <Navigate to="/auth" replace />}
           />
         </Route>
 

@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './UserComponent.module.scss';
 import { baseUrl, authorization } from '../../../Shared/Options/ApiOptions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import fonts from '../../../Shared/fonts.module.scss';
 import icons from '../../../Shared/icons.module.scss';
 import axios from 'axios';
@@ -49,8 +49,15 @@ const UserComponent = ({ user }) => {
                 <div className={fonts["font-grey-small"]}>
                     {user.city == null ? "No city" : user.city}, {user.country == null ? "No country" : user.country}
                 </div>
-                <div className={fonts["font-green-small"]}>
-                    <FontAwesomeIcon icon={faUser} className={icons.icon} /> {user.friendsCount}
+                <div className='d-flex'>
+                    <div className={fonts["font-green-small"]}>
+                        <FontAwesomeIcon icon={faUser} className={icons.icon} /> {user.friendsCount}
+                    </div>
+                    {user.mutualFriendsCount !== undefined && (
+                        <div className={`${fonts["font-green-small"]} ms-2`}>
+                            <FontAwesomeIcon icon={faUserGroup} className={icons.icon} /> {user.mutualFriendsCount}
+                        </div>
+                    )}
                 </div>
             </div>
             {isFriend && (

@@ -1,4 +1,5 @@
-﻿using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
+﻿using SocialNetworkBackend.Application.Requests.UserRequests.GetMutualFriends;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
 using SocialNetworkBackend.Domain.Entities;
 
 namespace SocialNetworkBackend.Application.Repositories;
@@ -16,4 +17,6 @@ public interface IUserRepository
     Task AddUser(User user);
 
     Task Update(User user);
+
+    Task<List<GetMutualFriendsDto>> GetMutualFriends(long id);
 }
