@@ -1,4 +1,9 @@
 .font-green {
+    &-large {
+        font-size: 3rem;
+        color: #1b5e20;
+    }
+
     &-medium {
         font-size: 1.5rem;
         color: #1b5e20;
@@ -10,7 +15,20 @@
     }
 }
 
-.font-grey-small {
-    font-size: 1rem;
-    color: #999;
+.font-grey {
+
+    &-large {
+        font-size: 3rem;
+        color: #999;
+    }
+
+    &-medium {
+        font-size: 1.5rem;
+        color: #999;
+    }
+
+    &-small {
+        font-size: 1rem;
+        color: #999;
+    }
 }

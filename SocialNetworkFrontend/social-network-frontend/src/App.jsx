@@ -11,6 +11,7 @@ import axios from "axios";
 import { baseUrl, authorization } from "./Shared/Options/ApiOptions";
 import FriendInvitesPage from "./FriendInvites/FriendInvitesPage";
 import MutualFriendsPage from "./MutualFriends/MutualFriendsPage";
+import UserDetailsPage from "./Users/UserDetails/UserDetailsPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -73,6 +74,10 @@ function App() {
           <Route
             path="/mutual-friends"
             element={isAuthenticated ? <MutualFriendsPage /> : <Navigate to="/auth" replace />}
+          />
+          <Route
+            path="/users/:id"
+            element={isAuthenticated ? <UserDetailsPage /> : <Navigate to="/auth" replace />}
           />
         </Route>
 

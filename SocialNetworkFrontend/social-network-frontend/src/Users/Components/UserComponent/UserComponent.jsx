@@ -7,10 +7,12 @@ import fonts from '../../../Shared/fonts.module.scss';
 import icons from '../../../Shared/icons.module.scss';
 import axios from 'axios';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserComponent = ({ user }) => {
     const [isFriend, setIsFriend] = useState(user.isFriend);
     const [isInvited, setIsInvited] = useState(user.isInvited);
+    const navigate = useNavigate();
 
     const handleAddFriend = async () => {
         try {
@@ -37,10 +39,18 @@ const UserComponent = ({ user }) => {
         }
     }
 
+    const handleNavigateToUserDetails = () => {
+        navigate(`/users/${user.userId}`);
+    };
+
     return (
         <div key={user.userId} className={`${classes["user-item"]} d-flex align-items-center mb-5`}>
             <div>
-                <img src={`${baseUrl}/user/${user.userId}/profile-picture`} alt="Profile" className={classes['user-profile-picture']} />
+                <img
+                    src={`${baseUrl}/user/${user.userId}/profile-picture`}
+                    alt="Profile"
+                    className={classes['user-profile-picture']}
+                    onClick={handleNavigateToUserDetails} />
             </div>
             <div className='ms-3'>
                 <div className={fonts["font-green-medium"]}>

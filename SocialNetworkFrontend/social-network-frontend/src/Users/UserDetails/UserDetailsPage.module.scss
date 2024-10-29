@@ -1,20 +1,28 @@
-.user-item {
+.user-details-profile-picture{
+    width: 10rem;
+    height: 10rem;
+    border: #2e7d32 1px solid;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-details-container {
+    width: 60rem;
     border-radius: 0.5rem;
     padding: 0.5rem;
     background-color: white;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-    width: 30rem;
-    flex-shrink: 0;
     position: relative;
 }
 
-.user-profile-picture{
-    width: 5rem;
-    height: 5rem;
-    border: #2e7d32 1px solid;
-    border-radius: 50%;
-    object-fit: cover;
-    cursor: pointer;
+.user-details-border {
+    border-right: #2e7d32 1px solid;
+    padding: 1rem;
+}
+
+.user-details-margin {
+    margin: 0 !important;
+    margin-left: 1.5rem !important;
 }
 
 .user-button {
