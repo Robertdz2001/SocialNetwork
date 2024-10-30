@@ -24,6 +24,8 @@ public class GetUserDetailsDto
 
     public List<FriendDto> Friends { get; set; } = new();
 
+    public bool IsItMyUser { get; set; }
+
     public class FriendDto
     {
         public long Id { get; set; }

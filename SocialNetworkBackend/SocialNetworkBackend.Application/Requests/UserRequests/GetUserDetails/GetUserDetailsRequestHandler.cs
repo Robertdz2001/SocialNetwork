@@ -43,7 +43,8 @@ public class GetUserDetailsRequestHandler : IRequestHandler<GetUserDetailsReques
                 Id = x.Id,
                 FirstName = x.FirstName,
                 LastName = x.LastName
-            }).ToList()
+            }).ToList(),
+            IsItMyUser = loggedUserId == user.Id,
         };
     }
 }

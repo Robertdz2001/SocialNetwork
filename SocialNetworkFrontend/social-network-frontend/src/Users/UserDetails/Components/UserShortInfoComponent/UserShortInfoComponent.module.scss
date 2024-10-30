@@ -1,0 +1,17 @@
+.user-item {
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: white;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    flex-basis: 45%;
+}
+
+.user-profile-picture{
+    width: 3rem;
+    height: 3rem;
+    border: #2e7d32 1px solid;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}

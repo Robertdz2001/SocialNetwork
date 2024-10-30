@@ -60,3 +60,25 @@
         }
     }
 }
+
+.user-details-nav-button {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    &:hover {
+        background-color: #cccccc;
+        transition: 0.5s;
+    }
+
+    &-active {
+        border: #8d8d8d 2px solid;
+    }
+}
+
+.friends-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    width: 40rem;
+    max-height: 35rem;
+    overflow: auto;
+}

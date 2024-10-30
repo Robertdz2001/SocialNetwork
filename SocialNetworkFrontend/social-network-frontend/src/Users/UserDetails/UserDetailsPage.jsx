@@ -1,18 +1,22 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { baseUrl, authorization } from "../../Shared/Options/ApiOptions.js";
 import classes from './UserDetailsPage.module.scss';
 import fonts from '../../Shared/fonts.module.scss';
 import icons from '../../Shared/icons.module.scss';
-import { faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faPager, faPhone, faUser, faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UserShortInfoComponent from "./Components/UserShortInfoComponent/UserShortInfoComponent.jsx";
 
 function UserDetailsPage() {
     const { id } = useParams();
     const [isFriend, setIsFriend] = useState(null);
     const [isInvited, setIsInvited] = useState(null);
+    const [chosenNav, setChosenNav] = useState('Users');
     const [userData, setUserData] = useState(null);
+    const userNavRef = useRef(null);
+    const postNavRef = useRef(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -53,10 +57,22 @@ function UserDetailsPage() {
         }
     }
 
+    const handleUserNav = () => {
+        userNavRef.current.classList.add(classes['user-details-nav-button-active']);
+        postNavRef.current.classList.remove(classes['user-details-nav-button-active']);
+        setChosenNav('Users');
+    }
+
+    const handlePostNav = () => {
+        userNavRef.current.classList.remove(classes['user-details-nav-button-active']);
+        postNavRef.current.classList.add(classes['user-details-nav-button-active']);
+        setChosenNav('Posts');
+    }
+
     return (
         <div>
             {userData ? (
-                <div className='d-flex justify-content-center'>
+                <div className='d-flex align-items-center flex-column'>
                     <div className={`${classes['user-details-container']} d-flex`}>
                         <img
                             src={`${baseUrl}/user/${userData.id}/profile-picture`}
@@ -73,16 +89,39 @@ function UserDetailsPage() {
                                 <p className="ms-2 m-0">{userData.phoneNumber}</p>
                             </div>
                         </div>
-                        {isFriend && (
-                            <button onClick={handleDeleteFriend} className={`${classes["user-button"]} ${classes["user-button-delete"]}`}>Delete</button>
-                        )}
-                        {isInvited && (
-                            <button className={`${classes["user-button"]} ${classes["user-button-accept"]}`}>Invited</button>
-                        )}
-                        {!isInvited && !isFriend && (
-                            <button onClick={handleAddFriend} className={`${classes["user-button"]} ${classes["user-button-accept"]}`}>Add</button>
+                        {!userData.isItMyUser && (
+                            <>
+                                {isFriend && (
+                                    <button onClick={handleDeleteFriend} className={`${classes["user-button"]} ${classes["user-button-delete"]}`}>Delete</button>
+                                )}
+                                {isInvited && (
+                                    <button className={`${classes["user-button"]} ${classes["user-button-accept"]}`}>Invited</button>
+                                )}
+                                {!isInvited && !isFriend && (
+                                    <button onClick={handleAddFriend} className={`${classes["user-button"]} ${classes["user-button-accept"]}`}>Add</button>
+                                )}
+                            </>
                         )}
                     </div>
+                    <div className="mt-3 d-flex">
+                        <div>
+                            <button ref={userNavRef} onClick={handleUserNav} className={`${classes['user-details-nav-button']} ${classes['user-details-nav-button-active']}`}><FontAwesomeIcon icon={faUser} className={icons.icon} /> {userData.friends.length}</button>
+                        </div>
+                        <div className="ms-4">
+                            <button ref={postNavRef} onClick={handlePostNav} className={classes['user-details-nav-button']}><FontAwesomeIcon icon={faPager} className={icons.icon} /> {userData.friends.length}</button>
+                        </div>
+                    </div>
+                    {chosenNav === 'Users' ? (
+                        <div className={`${classes['friends-container']} mt-4`}>
+                            {userData.friends.map(friend => (
+                                <UserShortInfoComponent key={friend.id} user={friend} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="mt-4">
+                            Posts
+                        </div>
+                    )}
                 </div>
             ) : (
                 <p>Loading user data...</p>
