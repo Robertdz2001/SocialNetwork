@@ -11,9 +11,12 @@ public class SocialNetworkDbContext : DbContext
     public DbSet<Role> Roles { get; set; }
 
     public DbSet<VerificationToken> VerificationTokens { get; set; }
+
     public DbSet<Photo> Photos { get; set; }
 
     public DbSet<FriendInvite> FriendInvites { get; set; }
+
+    public DbSet<Post> Posts { get; set; }
 
     public SocialNetworkDbContext(DbContextOptions<SocialNetworkDbContext> options) : base(options) { }
 

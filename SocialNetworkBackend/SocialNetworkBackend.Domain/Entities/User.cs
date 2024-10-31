@@ -23,9 +23,14 @@ public class User
     public string PasswordHash { get; set; }
 
     public long? PhotoId { get; set; }
+
     public Photo? Photo { get; set; }
 
     public List<User> Friends { get; set; } = new();
+
     public List<FriendInvite> SentFriendInvites { get; set; } = new();
+
     public List<FriendInvite> ReceivedFriendInvites { get; set; } = new();
+
+    public List<Post> Posts { get; set; } = new();
 }

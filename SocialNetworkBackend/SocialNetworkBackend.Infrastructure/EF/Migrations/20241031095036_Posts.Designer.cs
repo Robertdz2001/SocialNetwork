@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SocialNetworkBackend.Infrastructure.EF.Contexts;
@@ -11,9 +12,11 @@ using SocialNetworkBackend.Infrastructure.EF.Contexts;
 namespace SocialNetworkBackend.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(SocialNetworkDbContext))]
-    partial class SocialNetworkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241031095036_Posts")]
+    partial class Posts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,9 +102,12 @@ namespace SocialNetworkBackend.Infrastructure.EF.Migrations
                     b.Property<long?>("PhotoId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -622,13 +628,13 @@ namespace SocialNetworkBackend.Infrastructure.EF.Migrations
 
             modelBuilder.Entity("SocialNetworkBackend.Domain.Entities.Post", b =>
                 {
-                    b.HasOne("SocialNetworkBackend.Domain.Entities.User", "CreatedUser")
+                    b.HasOne("SocialNetworkBackend.Domain.Entities.User", "User")
                         .WithMany("Posts")
-                        .HasForeignKey("CreatedUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SocialNetworkBackend.Domain.Entities.User", b =>

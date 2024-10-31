@@ -13,7 +13,8 @@ public class DbContextConfiguration :
     IEntityTypeConfiguration<Role>,
     IEntityTypeConfiguration<VerificationToken>,
     IEntityTypeConfiguration<Photo>,
-    IEntityTypeConfiguration<FriendInvite>
+    IEntityTypeConfiguration<FriendInvite>,
+    IEntityTypeConfiguration<Post>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -70,6 +71,10 @@ public class DbContextConfiguration :
             .HasOne(x => x.User)
             .WithOne(x => x.Photo)
             .HasForeignKey<Photo>(x => x.UserId);
+        builder
+            .HasOne(x => x.Post)
+            .WithOne(x => x.Photo)
+            .HasForeignKey<Photo>(x => x.PostId);
     }
 
     public void Configure(EntityTypeBuilder<FriendInvite> builder)
@@ -85,6 +90,22 @@ public class DbContextConfiguration :
             .HasOne(f => f.Receiver)
             .WithMany(u => u.ReceivedFriendInvites)
             .HasForeignKey(f => f.ReceiverId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    public void Configure(EntityTypeBuilder<Post> builder)
+    {
+        builder
+            .HasKey(x => x.Id);
+        builder
+            .HasOne(x => x.CreatedUser)
+            .WithMany(y => y.Posts)
+            .HasForeignKey(x => x.CreatedUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder
+            .HasOne(u => u.Photo)
+            .WithOne()
+            .HasForeignKey<Post>(u => u.PhotoId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 
