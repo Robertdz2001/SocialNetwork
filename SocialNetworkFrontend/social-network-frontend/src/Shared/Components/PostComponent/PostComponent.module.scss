@@ -1,0 +1,31 @@
+.post-item {
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: white;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    width: 30rem;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.created-user-profile-picture{
+    width: 2rem;
+    height: 2rem;
+    border: #2e7d32 1px solid;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.post-photo{
+    width: 20rem;
+    height: 20rem;
+    border-radius: 0.5rem;
+    border: #2e7d32 1px solid;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.post-content{
+    width: 20rem;
+}

@@ -5,4 +5,6 @@ namespace SocialNetworkBackend.Application.Repositories;
 public interface IPhotoRepository
 {
     Task<Photo?> GetPhotoByUserId(long userId);
+
+    Task<Photo?> GetPhotoByPostId(long postId);
 }

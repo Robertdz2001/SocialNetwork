@@ -17,4 +17,8 @@ public class PhotoRepository : IPhotoRepository
     public async Task<Photo?> GetPhotoByUserId(long userId)
         => await _dbContext.Photos
             .FirstOrDefaultAsync(x => x.UserId == userId);
+
+    public async Task<Photo?> GetPhotoByPostId(long postId)
+        => await _dbContext.Photos
+            .FirstOrDefaultAsync(x => x.PostId == postId);
 }
