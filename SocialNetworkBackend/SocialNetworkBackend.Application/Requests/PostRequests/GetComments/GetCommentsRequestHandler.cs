@@ -26,6 +26,7 @@ public class GetCommentsRequestHandler : IRequestHandler<GetCommentsRequest, Lis
 
         var commentsDto = post.UserComments.Select(x => new GetCommentsDto()
         {
+            CommentId = x.Id,
             UserId = x.User.Id,
             UserFirstName = x.User.FirstName,
             UserLastName = x.User.LastName,

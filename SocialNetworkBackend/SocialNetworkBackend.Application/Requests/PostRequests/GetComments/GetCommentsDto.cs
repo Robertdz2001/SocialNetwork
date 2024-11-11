@@ -2,6 +2,8 @@
 
 public class GetCommentsDto
 {
+    public long CommentId {  get; set; }
+
     public long UserId { get; set; }
 
     public string UserFirstName {  get; set; }

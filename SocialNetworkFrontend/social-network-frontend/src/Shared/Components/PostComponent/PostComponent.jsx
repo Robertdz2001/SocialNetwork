@@ -10,6 +10,7 @@ import { faCalendarDays, faComment, faPlus, faThumbsUp, faX } from "@fortawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import modalClasses from '../../modals.module.scss';
 import authClasses from '../../../Authentication/AuthenticationPage.module.scss'
+import CommentComponent from './CommentComponent/CommentComponent.jsx';
 
 const PostComponent = ({ handlePostRefresh, post }) => {
     const navigate = useNavigate();
@@ -141,9 +142,9 @@ const PostComponent = ({ handlePostRefresh, post }) => {
                                 <FontAwesomeIcon icon={faX} className={icons.icon} />
                             </button>
                         </div>
-                        <div>
+                        <div className={classes['post-comments-container']}>
                             {comments.map(comment => (
-                                <p>{comment.content}</p>
+                                <CommentComponent comment={comment}/>
                             ))}
                         </div>
                         <div className='d-flex justify-content-between'>
@@ -151,6 +152,7 @@ const PostComponent = ({ handlePostRefresh, post }) => {
                                 type="text"
                                 name="commentContent"
                                 placeholder="Comment"
+                                maxLength={100}
                                 className={classes["post-input"]}
                                 value={commentContent}
                                 onChange={(e) => setCommentContent(e.target.value)}
