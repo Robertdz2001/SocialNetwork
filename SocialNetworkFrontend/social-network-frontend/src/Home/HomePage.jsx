@@ -14,6 +14,7 @@ const HomePage = () => {
   const [posts, setPosts] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [triggerEffect, setTriggerEffect] = useState(false);
   const [filters, setFilters] = useState({
     createdUserFirstName: '',
     createdUserLastName: '',
@@ -47,7 +48,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchPosts(pageNumber, filters);
-  }, [pageNumber, filters]);
+  }, [pageNumber, filters, triggerEffect]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -60,6 +61,10 @@ const HomePage = () => {
 
     setFilters(newFilters);
     setPageNumber(1);
+  };
+
+  const handlePostRefresh = () => {
+    setTriggerEffect(prev => !prev);
   };
 
   const handlePageChange = ({ selected }) => {
@@ -98,7 +103,6 @@ const HomePage = () => {
 
   return (
     <div>
-      <button onClick={toggleModal}>Create Post</button>
       <form onSubmit={handleSearch} className='d-flex justify-content-center'>
         <div className={classes["filter-input-group-container"]}>
           <div className={classes['filter-input-group']}>
@@ -122,13 +126,14 @@ const HomePage = () => {
             />
           </div>
           <div className='d-flex justify-content-end'>
+          <button className={`me-2 ${classes["create-post-button"]}`} onClick={toggleModal}>Create</button>
             <button className={classes["search-button"]} type="submit">Search</button>
           </div>
         </div>
       </form>
       <div className='d-flex justify-content-center align-items-center flex-column'>
         {posts.map(post => (
-          <PostComponent key={post.postId} post={post} />
+          <PostComponent handlePostRefresh={handlePostRefresh} key={post.postId} post={post} />
         ))}
       </div>
       <ReactPaginate

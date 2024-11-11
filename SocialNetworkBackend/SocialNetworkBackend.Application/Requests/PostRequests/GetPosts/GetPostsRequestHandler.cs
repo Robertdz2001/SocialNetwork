@@ -47,7 +47,10 @@ public class GetPostsRequestHandler : IRequestHandler<GetPostsRequest, PagedResu
             CreatedUserFirstName = x.CreatedUser.FirstName,
             CreatedUserLastName = x.CreatedUser.LastName,
             PostId = x.Id,
-            Content = x.Content
+            Content = x.Content,
+            CreatedDate = x.Created,
+            UserLikesCount = x.UserLikes.Count,
+            IsLiked = x.UserLikes.FirstOrDefault(y => y.UserId == loggedUserId) is not null
         }).ToList();
 
         var pagedResult = new PagedResult<GetPostsDto>(postsDto, postsDto.Count, pageSize, request.PageNumber);

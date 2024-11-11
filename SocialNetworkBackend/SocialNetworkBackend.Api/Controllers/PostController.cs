@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SocialNetworkBackend.Application.Requests.PostRequests.CreatePost;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPostPhoto;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPosts;
+using SocialNetworkBackend.Application.Requests.PostRequests.TogglePostLike;
 
 namespace SocialNetworkBackend.Api.Controllers;
 
@@ -45,5 +46,19 @@ public class PostController : ControllerBase
 
         var result = await _mediator.Send(request);
         return File(result.Data, result.ContentType);
+    }
+
+    /// <summary>
+    /// Toggles post like. If user already liked post it will delete this like.
+    /// </summary>
+    /// <param name="postId"></param>
+    /// <returns></returns>
+    [HttpPut("{postId}/toggle-like")]
+    public async Task<IActionResult> TogglePostLike([FromRoute] long postId)
+    {
+        var request = new TogglePostLikeRequest { PostId = postId };
+
+        await _mediator.Send(request);
+        return Ok();
     }
 }

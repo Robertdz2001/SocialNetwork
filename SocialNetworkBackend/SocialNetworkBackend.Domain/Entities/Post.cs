@@ -15,4 +15,6 @@ public class Post
     public long CreatedUserId { get; set; }
 
     public User CreatedUser { get; set; }
+
+    public List<UserLike> UserLikes { get; set; }
 }

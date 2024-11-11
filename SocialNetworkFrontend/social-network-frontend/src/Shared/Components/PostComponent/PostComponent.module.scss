@@ -28,4 +28,32 @@
 
 .post-content{
     width: 20rem;
+    overflow-wrap: break-word;
+}
+
+.post-actions {
+    border-top: 1px solid #000;
+    padding-top: 1rem;
+}
+
+.post-stats {
+    border-top: 1px solid #000;
+    padding-top: 1rem;
+}
+
+.post-action {
+    font-size: 1rem;
+    color: #1b5e20;
+    &:hover {
+        background-color: #cccccc;
+        transition: 0.5s;
+        border-radius: 0.5rem;
+        padding: 0.25rem;
+      }
+    
+    &-active {
+        background-color: #cccccc;
+        border-radius: 0.5rem;
+        padding: 0.25rem;
+    }
 }

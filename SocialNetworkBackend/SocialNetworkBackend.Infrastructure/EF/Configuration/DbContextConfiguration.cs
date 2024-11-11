@@ -14,7 +14,8 @@ public class DbContextConfiguration :
     IEntityTypeConfiguration<VerificationToken>,
     IEntityTypeConfiguration<Photo>,
     IEntityTypeConfiguration<FriendInvite>,
-    IEntityTypeConfiguration<Post>
+    IEntityTypeConfiguration<Post>,
+    IEntityTypeConfiguration<UserLike>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -106,6 +107,25 @@ public class DbContextConfiguration :
             .HasOne(u => u.Photo)
             .WithOne()
             .HasForeignKey<Post>(u => u.PhotoId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder
+            .HasMany(x => x.UserLikes)
+            .WithOne(y => y.Post);
+    }
+
+    public void Configure(EntityTypeBuilder<UserLike> builder)
+    {
+        builder
+            .HasKey(x => x.Id);
+        builder
+            .HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder
+            .HasOne(x => x.Post)
+            .WithMany(y => y.UserLikes)
+            .HasForeignKey(x => x.PostId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 

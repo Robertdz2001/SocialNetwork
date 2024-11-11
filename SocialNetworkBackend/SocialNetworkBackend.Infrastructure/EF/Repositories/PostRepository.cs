@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetworkBackend.Application.Repositories;
-using SocialNetworkBackend.Application.Requests.PostRequests.GetPosts;
-using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
 using SocialNetworkBackend.Domain.Entities;
 using SocialNetworkBackend.Infrastructure.EF.Contexts;
 
@@ -26,6 +24,18 @@ public class PostRepository : IPostRepository
     => await _dbContext.Posts
         .Include(x => x.CreatedUser)
         .ThenInclude(x => x.Friends)
+        .Include(x => x.UserLikes)
         .Where(x => x.CreatedUser.Friends.FirstOrDefault(y => y.Id == loggedUserId) != null && x.CreatedUserId != loggedUserId)
         .ToListAsync();
+
+    public async Task UpdatePost(Post post)
+    {
+        _dbContext.Posts.Update(post);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<Post?> GetPostById(long postId)
+    => await _dbContext.Posts
+        .Include(x => x.UserLikes)
+        .FirstOrDefaultAsync(x => x.Id == postId);
 }

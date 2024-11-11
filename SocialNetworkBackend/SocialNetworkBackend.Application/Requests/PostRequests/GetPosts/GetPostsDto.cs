@@ -11,4 +11,10 @@ public class GetPostsDto
     public long PostId { get; set; }
 
     public string Content {  get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public int UserLikesCount {  get; set; }
+
+    public bool IsLiked { get; set; }
 }

@@ -18,6 +18,8 @@ public class SocialNetworkDbContext : DbContext
 
     public DbSet<Post> Posts { get; set; }
 
+    public DbSet<UserLike> UserLikes { get; set; }
+
     public SocialNetworkDbContext(DbContextOptions<SocialNetworkDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,5 +31,6 @@ public class SocialNetworkDbContext : DbContext
         modelBuilder.ApplyConfiguration<VerificationToken>(configuration);
         modelBuilder.ApplyConfiguration<Photo>(configuration);
         modelBuilder.ApplyConfiguration<FriendInvite>(configuration);
+        modelBuilder.ApplyConfiguration<UserLike>(configuration);
     }
 }
