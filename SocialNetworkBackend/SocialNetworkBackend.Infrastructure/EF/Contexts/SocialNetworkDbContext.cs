@@ -20,6 +20,8 @@ public class SocialNetworkDbContext : DbContext
 
     public DbSet<UserLike> UserLikes { get; set; }
 
+    public DbSet<UserComment> UserComments { get; set; }
+
     public SocialNetworkDbContext(DbContextOptions<SocialNetworkDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,5 +34,6 @@ public class SocialNetworkDbContext : DbContext
         modelBuilder.ApplyConfiguration<Photo>(configuration);
         modelBuilder.ApplyConfiguration<FriendInvite>(configuration);
         modelBuilder.ApplyConfiguration<UserLike>(configuration);
+        modelBuilder.ApplyConfiguration<UserComment>(configuration);
     }
 }

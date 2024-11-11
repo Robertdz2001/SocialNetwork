@@ -25,6 +25,7 @@ public class PostRepository : IPostRepository
         .Include(x => x.CreatedUser)
         .ThenInclude(x => x.Friends)
         .Include(x => x.UserLikes)
+        .Include(x => x.UserComments)
         .Where(x => x.CreatedUser.Friends.FirstOrDefault(y => y.Id == loggedUserId) != null && x.CreatedUserId != loggedUserId)
         .ToListAsync();
 
@@ -37,5 +38,7 @@ public class PostRepository : IPostRepository
     public async Task<Post?> GetPostById(long postId)
     => await _dbContext.Posts
         .Include(x => x.UserLikes)
+        .Include(x => x.UserComments)
+        .ThenInclude(x => x.User)
         .FirstOrDefaultAsync(x => x.Id == postId);
 }

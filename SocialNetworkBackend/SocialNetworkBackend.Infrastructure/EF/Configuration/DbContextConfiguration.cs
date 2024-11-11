@@ -15,7 +15,8 @@ public class DbContextConfiguration :
     IEntityTypeConfiguration<Photo>,
     IEntityTypeConfiguration<FriendInvite>,
     IEntityTypeConfiguration<Post>,
-    IEntityTypeConfiguration<UserLike>
+    IEntityTypeConfiguration<UserLike>,
+    IEntityTypeConfiguration<UserComment>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -125,6 +126,22 @@ public class DbContextConfiguration :
         builder
             .HasOne(x => x.Post)
             .WithMany(y => y.UserLikes)
+            .HasForeignKey(x => x.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    public void Configure(EntityTypeBuilder<UserComment> builder)
+    {
+        builder
+            .HasKey(x => x.Id);
+        builder
+            .HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder
+            .HasOne(x => x.Post)
+            .WithMany(y => y.UserComments)
             .HasForeignKey(x => x.PostId)
             .OnDelete(DeleteBehavior.Cascade);
     }

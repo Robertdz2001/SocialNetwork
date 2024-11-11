@@ -17,4 +17,6 @@ public class GetPostsDto
     public int UserLikesCount {  get; set; }
 
     public bool IsLiked { get; set; }
+
+    public int CommentsCount {  get; set; }
 }

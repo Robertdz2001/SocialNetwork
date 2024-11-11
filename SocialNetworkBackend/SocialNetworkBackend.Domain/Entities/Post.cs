@@ -17,4 +17,6 @@ public class Post
     public User CreatedUser { get; set; }
 
     public List<UserLike> UserLikes { get; set; }
+
+    public List<UserComment> UserComments { get; set; }
 }

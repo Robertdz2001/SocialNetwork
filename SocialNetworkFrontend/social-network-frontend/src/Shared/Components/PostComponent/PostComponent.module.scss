@@ -44,16 +44,26 @@
 .post-action {
     font-size: 1rem;
     color: #1b5e20;
+    padding: 0.25rem;
     &:hover {
         background-color: #cccccc;
         transition: 0.5s;
         border-radius: 0.5rem;
-        padding: 0.25rem;
       }
     
     &-active {
         background-color: #cccccc;
         border-radius: 0.5rem;
-        padding: 0.25rem;
     }
+}
+
+.post-input {
+    padding: 0.75rem;
+    border: 1px solid #4caf50;
+    border-radius: 4px;
+    outline: none;
+    font-size: 1rem;
+    color: #1b5e20;
+    height: 1rem;
+    width: 100%;
 }

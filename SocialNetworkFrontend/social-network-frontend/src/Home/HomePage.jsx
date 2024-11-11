@@ -6,6 +6,7 @@ import axios from "axios";
 import ReactPaginate from 'react-paginate';
 import paginationClasses from '../Shared/pagination.module.scss';
 import PostComponent from "../Shared/Components/PostComponent/PostComponent";
+import modalClasses from "../Shared/modals.module.scss";
 
 const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -152,8 +153,8 @@ const HomePage = () => {
         forcePage={pageNumber - 1}
       />
       {isModalOpen && (
-        <div className={classes['modal']}>
-          <div className={classes['modal-content']}>
+        <div className={modalClasses['modal']}>
+          <div className={modalClasses['modal-content']}>
             <h2 className={authClasses['auth-header']}>Create Post</h2>
             <form className={classes['post-form']} onSubmit={handleSubmit}>
               <div className="mb-5">

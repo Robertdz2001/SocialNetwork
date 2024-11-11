@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SocialNetworkBackend.Application.Requests.PostRequests.AddComment;
 using SocialNetworkBackend.Application.Requests.PostRequests.CreatePost;
+using SocialNetworkBackend.Application.Requests.PostRequests.GetComments;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPostPhoto;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPosts;
 using SocialNetworkBackend.Application.Requests.PostRequests.TogglePostLike;
@@ -60,5 +62,23 @@ public class PostController : ControllerBase
 
         await _mediator.Send(request);
         return Ok();
+    }
+
+    [HttpPost("{postId}/comment")]
+    public async Task<IActionResult> AddComment([FromRoute] long postId, [FromBody] string content)
+    {
+        var request = new AddCommentRequest { PostId = postId, Content = content };
+
+        await _mediator.Send(request);
+        return Ok();
+    }
+
+    [HttpGet("{postId}/comment")]
+    public async Task<IActionResult> GetComments([FromRoute] long postId)
+    {
+        var request = new GetCommentsRequest { PostId = postId };
+
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
 }

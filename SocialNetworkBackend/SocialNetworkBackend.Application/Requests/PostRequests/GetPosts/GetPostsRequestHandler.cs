@@ -50,8 +50,10 @@ public class GetPostsRequestHandler : IRequestHandler<GetPostsRequest, PagedResu
             Content = x.Content,
             CreatedDate = x.Created,
             UserLikesCount = x.UserLikes.Count,
-            IsLiked = x.UserLikes.FirstOrDefault(y => y.UserId == loggedUserId) is not null
-        }).ToList();
+            IsLiked = x.UserLikes.FirstOrDefault(y => y.UserId == loggedUserId) is not null,
+            CommentsCount = x.UserComments.Count
+        }).OrderByDescending(x => x.CreatedDate)
+        .ToList();
 
         var pagedResult = new PagedResult<GetPostsDto>(postsDto, postsDto.Count, pageSize, request.PageNumber);
 
