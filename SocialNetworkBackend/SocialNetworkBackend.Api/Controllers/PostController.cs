@@ -6,6 +6,7 @@ using SocialNetworkBackend.Application.Requests.PostRequests.CreatePost;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetComments;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPostPhoto;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPosts;
+using SocialNetworkBackend.Application.Requests.PostRequests.GetUsersPosts;
 using SocialNetworkBackend.Application.Requests.PostRequests.TogglePostLike;
 
 namespace SocialNetworkBackend.Api.Controllers;
@@ -80,5 +81,13 @@ public class PostController : ControllerBase
 
         var response = await _mediator.Send(request);
         return Ok(response);
+    }
+
+    [HttpGet("user/{userId}")]
+    [Authorize]
+    public async Task<IActionResult> GetUsersPosts([FromRoute] long userId)
+    {
+        var result = await _mediator.Send(new GetUsersPostsRequest { UserId = userId } );
+        return Ok(result);
     }
 }

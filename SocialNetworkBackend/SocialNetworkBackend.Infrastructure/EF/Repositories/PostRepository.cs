@@ -29,6 +29,15 @@ public class PostRepository : IPostRepository
         .Where(x => x.CreatedUser.Friends.FirstOrDefault(y => y.Id == loggedUserId) != null && x.CreatedUserId != loggedUserId)
         .ToListAsync();
 
+    public async Task<List<Post>> GetPostsByUserId(long userId)
+    => await _dbContext.Posts
+        .Include(x => x.CreatedUser)
+        .ThenInclude(x => x.Friends)
+        .Include(x => x.UserLikes)
+        .Include(x => x.UserComments)
+        .Where(x => x.CreatedUser.Id == userId)
+        .ToListAsync();
+
     public async Task UpdatePost(Post post)
     {
         _dbContext.Posts.Update(post);

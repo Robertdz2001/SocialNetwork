@@ -8,6 +8,7 @@ import icons from '../../Shared/icons.module.scss';
 import { faPager, faPhone, faUser, faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserShortInfoComponent from "./Components/UserShortInfoComponent/UserShortInfoComponent.jsx";
+import PostComponent from "../../Shared/Components/PostComponent/PostComponent.jsx";
 
 function UserDetailsPage() {
     const { id } = useParams();
@@ -15,14 +16,20 @@ function UserDetailsPage() {
     const [isInvited, setIsInvited] = useState(null);
     const [chosenNav, setChosenNav] = useState('Users');
     const [userData, setUserData] = useState(null);
+    const [userPosts, setUserPosts] = useState(null);
     const userNavRef = useRef(null);
     const postNavRef = useRef(null);
+    const [triggerEffect, setTriggerEffect] = useState(false);
+
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const response = await axios.get(`${baseUrl}/user/${id}`, authorization(localStorage.getItem("token")));
+                const responsePosts = await axios.get(`${baseUrl}/post/user/${id}`, authorization(localStorage.getItem("token")));
+
                 setUserData(response.data);
+                setUserPosts(responsePosts.data);
                 setIsFriend(response.data.isFriend);
                 setIsInvited(response.data.isInvited);
             } catch (error) {
@@ -30,7 +37,7 @@ function UserDetailsPage() {
             }
         };
         fetchUserData();
-    }, [id]);
+    }, [id, triggerEffect]);
 
     const handleAddFriend = async () => {
         try {
@@ -69,9 +76,13 @@ function UserDetailsPage() {
         setChosenNav('Posts');
     }
 
+    const handlePostRefresh = () => {
+        setTriggerEffect(prev => !prev);
+    };
+
     return (
         <div>
-            {userData ? (
+            {userData && userPosts ? (
                 <div className='d-flex align-items-center flex-column'>
                     <div className={`${classes['user-details-container']} d-flex`}>
                         <img
@@ -108,7 +119,7 @@ function UserDetailsPage() {
                             <button ref={userNavRef} onClick={handleUserNav} className={`${classes['user-details-nav-button']} ${classes['user-details-nav-button-active']}`}><FontAwesomeIcon icon={faUser} className={icons.icon} /> {userData.friends.length}</button>
                         </div>
                         <div className="ms-4">
-                            <button ref={postNavRef} onClick={handlePostNav} className={classes['user-details-nav-button']}><FontAwesomeIcon icon={faPager} className={icons.icon} /> {userData.friends.length}</button>
+                            <button ref={postNavRef} onClick={handlePostNav} className={classes['user-details-nav-button']}><FontAwesomeIcon icon={faPager} className={icons.icon} /> {userPosts.length}</button>
                         </div>
                     </div>
                     {chosenNav === 'Users' ? (
@@ -118,8 +129,10 @@ function UserDetailsPage() {
                             ))}
                         </div>
                     ) : (
-                        <div className="mt-4">
-                            Posts
+                        <div className={`${classes['friends-container']} mt-4`}>
+                            {userPosts.map(post => (
+                                <PostComponent handlePostRefresh={handlePostRefresh} key={post.postId} post={post} />
+                            ))}
                         </div>
                     )}
                 </div>
