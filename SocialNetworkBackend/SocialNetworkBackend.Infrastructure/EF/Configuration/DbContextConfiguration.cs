@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SocialNetworkBackend.Domain.Entities;
 using SocialNetworkBackend.Domain.Enums;
+using System.Reflection.Emit;
 
 namespace SocialNetworkBackend.Infrastructure.EF.Configuration;
 
@@ -16,7 +17,9 @@ public class DbContextConfiguration :
     IEntityTypeConfiguration<FriendInvite>,
     IEntityTypeConfiguration<Post>,
     IEntityTypeConfiguration<UserLike>,
-    IEntityTypeConfiguration<UserComment>
+    IEntityTypeConfiguration<UserComment>,
+    IEntityTypeConfiguration<Chat>,
+    IEntityTypeConfiguration<Message>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -144,6 +147,36 @@ public class DbContextConfiguration :
             .WithMany(y => y.UserComments)
             .HasForeignKey(x => x.PostId)
             .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    public void Configure(EntityTypeBuilder<Chat> builder)
+    {
+        builder
+            .HasOne(c => c.User1)
+            .WithMany(u => u.ChatsAsUser1)
+            .HasForeignKey(c => c.User1Id)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(c => c.User2)
+            .WithMany(u => u.ChatsAsUser2)
+            .HasForeignKey(c => c.User2Id)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+
+    public void Configure(EntityTypeBuilder<Message> builder)
+    {
+        builder
+            .HasOne(m => m.Chat)
+            .WithMany(c => c.Messages)
+            .HasForeignKey(m => m.ChatId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne(m => m.User)
+            .WithMany()
+            .HasForeignKey(m => m.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
     private IEnumerable<Role> GetRoles()

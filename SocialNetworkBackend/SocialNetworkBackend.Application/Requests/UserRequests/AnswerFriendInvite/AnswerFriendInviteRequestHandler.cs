@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SocialNetworkBackend.Application.Repositories;
 using SocialNetworkBackend.Application.Services;
+using SocialNetworkBackend.Domain.Entities;
 using SocialNetworkBackend.Shared.Exceptions;
 
 namespace SocialNetworkBackend.Application.Requests.UserRequests.AnswerFriendInvite;
@@ -34,8 +35,15 @@ public class AnswerFriendInviteRequestHandler : IRequestHandler<AnswerFriendInvi
 
         if (request.IsAccepted)
         {
+            var chat = new Chat()
+            {
+                User1Id = loggedUserId,
+                User2Id = userToAdd.Id,
+            };
+
             userToAdd.Friends.Add(loggedUser);
             loggedUser.Friends.Add(userToAdd);
+            loggedUser.ChatsAsUser1.Add(chat);
         }
 
         await _userRepository.Update(userToAdd);

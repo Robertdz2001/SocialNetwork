@@ -22,6 +22,10 @@ public class SocialNetworkDbContext : DbContext
 
     public DbSet<UserComment> UserComments { get; set; }
 
+    public DbSet<Chat> Chats { get; set; }
+
+    public DbSet<Message> Messages { get; set; }
+
     public SocialNetworkDbContext(DbContextOptions<SocialNetworkDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,5 +39,7 @@ public class SocialNetworkDbContext : DbContext
         modelBuilder.ApplyConfiguration<FriendInvite>(configuration);
         modelBuilder.ApplyConfiguration<UserLike>(configuration);
         modelBuilder.ApplyConfiguration<UserComment>(configuration);
+        modelBuilder.ApplyConfiguration<Chat>(configuration);
+        modelBuilder.ApplyConfiguration<Message>(configuration);
     }
 }

@@ -23,6 +23,7 @@ public static class Extensions
         services.AddScoped<IVerificationTokenRepository, VerificationTokenRepository>();
         services.AddScoped<IPhotoRepository, PhotoRepository>();
         services.AddScoped<IPostRepository, PostRepository>();
+        services.AddScoped<IChatRepository, ChatRepository>();
         return services;
     }
 }
