@@ -15,7 +15,7 @@ const CommentComponent = ({ comment }) => {
     };
 
     return (
-        <div key={comment.commentId} className={`${classes["comment-item"]} mb-5`}>
+        <div key={comment.commentId} className='mb-5'>
             <div className='d-flex align-items-center justify-content-between mb-2 me-3'>
                 <div className='d-flex align-items-center'>
                     <div className='ms-2'>

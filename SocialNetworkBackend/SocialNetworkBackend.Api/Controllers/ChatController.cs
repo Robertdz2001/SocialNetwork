@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using SocialNetworkBackend.Api.Hubs;
 using SocialNetworkBackend.Application.Requests.ChatRequests.GetChats;
 using SocialNetworkBackend.Application.Requests.ChatRequests.GetChatsMessages;
 using SocialNetworkBackend.Application.Requests.ChatRequests.SendMessage;
@@ -12,10 +14,12 @@ namespace SocialNetworkBackend.Api.Controllers;
 public class ChatController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IHubContext<ChatHub, IChatHub> _hub;
 
-    public ChatController(IMediator mediator)
+    public ChatController(IMediator mediator, IHubContext<ChatHub, IChatHub> hub)
     {
         _mediator = mediator;
+        _hub = hub;
     }
 
     [HttpGet]
@@ -39,6 +43,9 @@ public class ChatController : ControllerBase
     public async Task<IActionResult> SendMessage([FromRoute] long id, [FromBody] string content)
     {
         await _mediator.Send(new SendMessageRequest { Id = id, Content = content });
+
+        await _hub.Clients.Groups(id.ToString()).SendMessageToChat(id);
+
         return Ok();
     }
 }
