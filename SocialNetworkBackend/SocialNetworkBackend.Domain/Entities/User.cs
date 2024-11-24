@@ -37,4 +37,6 @@ public class User
     public List<Chat> ChatsAsUser1 { get; set; } = new();
 
     public List<Chat> ChatsAsUser2 { get; set; } = new();
+
+    public bool IsBlocked {  get; set; }
 }

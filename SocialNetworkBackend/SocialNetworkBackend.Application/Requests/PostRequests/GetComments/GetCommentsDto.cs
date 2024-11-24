@@ -15,4 +15,6 @@ public class GetCommentsDto
     public DateTime Created { get; set; }
 
     public bool IsMine {  get; set; }
+
+    public bool CanDelete {  get; set; }
 }

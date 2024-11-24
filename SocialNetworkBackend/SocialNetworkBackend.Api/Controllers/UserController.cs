@@ -3,16 +3,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetworkBackend.Application.Requests.UserRequests.AddFriend;
 using SocialNetworkBackend.Application.Requests.UserRequests.AnswerFriendInvite;
+using SocialNetworkBackend.Application.Requests.UserRequests.BlockUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.DeleteFriend;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetFriendInvites;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetMutualFriends;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetMyUserDetails;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetProfilePicture;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetUserDetails;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
 using SocialNetworkBackend.Application.Requests.UserRequests.GetUserShortInfo;
+using SocialNetworkBackend.Application.Requests.UserRequests.IsLoggedIn;
 using SocialNetworkBackend.Application.Requests.UserRequests.LoginUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.PasswordReset;
 using SocialNetworkBackend.Application.Requests.UserRequests.RegisterUser;
+using SocialNetworkBackend.Application.Requests.UserRequests.UpdateMyUserDetails;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyLoginUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyPasswordReset;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyRegisterUser;
@@ -140,8 +144,9 @@ public class UserController : ControllerBase
     /// <returns></returns>
     [Authorize]
     [HttpGet("is-logged-in")]
-    public IActionResult IsLoggedIn()
+    public async Task<IActionResult> IsLoggedIn()
     {
+        await _mediator.Send(new IsLoggedInRequest());
         return Ok();
     }
 
@@ -207,5 +212,29 @@ public class UserController : ControllerBase
     {
         var result = await _mediator.Send(new GetUserDetailsRequest { Id = id });
         return Ok(result);
+    }
+
+    [HttpPut("{userId}/toggle-block")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ToggleBlockUser([FromRoute] long userId)
+    {
+        await _mediator.Send(new ToggleBlockUserRequest { UserId = userId });
+        return Ok();
+    }
+
+    [HttpGet("get-my-user")]
+    [Authorize]
+    public async Task<IActionResult> GetMyUserDetails()
+    {
+        var result = await _mediator.Send(new GetMyUserDetailsRequest());
+        return Ok(result);
+    }
+
+    [HttpPut("update-user")]
+    [Authorize]
+    public async Task<IActionResult> UpdateMyUserDetails([FromForm] UpdateMyUserDetailsRequest request)
+    {
+        await _mediator.Send(request);
+        return Ok();
     }
 }

@@ -50,4 +50,10 @@ public class PostRepository : IPostRepository
         .Include(x => x.UserComments)
         .ThenInclude(x => x.User)
         .FirstOrDefaultAsync(x => x.Id == postId);
+
+    public async Task DeletePost(Post post)
+    {
+        _dbContext.Posts.Remove(post);
+        await _dbContext.SaveChangesAsync();
+    }
 }

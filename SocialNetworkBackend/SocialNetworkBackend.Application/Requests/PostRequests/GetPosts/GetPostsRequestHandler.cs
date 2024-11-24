@@ -2,6 +2,7 @@
 using SocialNetworkBackend.Application.Pagination;
 using SocialNetworkBackend.Application.Repositories;
 using SocialNetworkBackend.Application.Services;
+using SocialNetworkBackend.Domain.Enums;
 using SocialNetworkBackend.Shared.Exceptions;
 
 namespace SocialNetworkBackend.Application.Requests.PostRequests.GetPosts;
@@ -10,17 +11,22 @@ public class GetPostsRequestHandler : IRequestHandler<GetPostsRequest, PagedResu
 {
     private readonly IPostRepository _postRepository;
     private readonly IUserContextService _userContextService;
+    private readonly IUserRepository _userRepository;
 
-    public GetPostsRequestHandler(IPostRepository postRepository, IUserContextService userContextService)
+    public GetPostsRequestHandler(IPostRepository postRepository, IUserContextService userContextService, IUserRepository userRepository)
     {
         _postRepository = postRepository;
         _userContextService = userContextService;
+        _userRepository = userRepository;
     }
 
     public async Task<PagedResult<GetPostsDto>> Handle(GetPostsRequest request, CancellationToken cancellationToken)
     {
         var loggedUserId = _userContextService.GetUserId()
             ?? throw new BadRequestException("User is not logged in");
+
+        var loggedUser = await _userRepository.GetUserById(loggedUserId)
+            ?? throw new NotFoundException("User was not found");
 
         var posts = await _postRepository.GetPosts(loggedUserId);
 
@@ -51,7 +57,8 @@ public class GetPostsRequestHandler : IRequestHandler<GetPostsRequest, PagedResu
             CreatedDate = x.Created,
             UserLikesCount = x.UserLikes.Count,
             IsLiked = x.UserLikes.FirstOrDefault(y => y.UserId == loggedUserId) is not null,
-            CommentsCount = x.UserComments.Count
+            CommentsCount = x.UserComments.Count,
+            CanDelete = x.CreatedUserId == loggedUserId || loggedUser.RoleId == (long)UserRoles.Admin
         }).OrderByDescending(x => x.CreatedDate)
         .ToList();
 

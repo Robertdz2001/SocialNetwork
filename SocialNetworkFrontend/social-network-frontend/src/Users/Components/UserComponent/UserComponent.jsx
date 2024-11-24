@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 const UserComponent = ({ user }) => {
     const [isFriend, setIsFriend] = useState(user.isFriend);
     const [isInvited, setIsInvited] = useState(user.isInvited);
+    const [isBlocked, setIsBlocked] = useState(user.isBlocked);
+    const [canBlock, setCanBlock] = useState(user.canBlockUser);
     const navigate = useNavigate();
 
     const handleAddFriend = async () => {
@@ -35,6 +37,25 @@ const UserComponent = ({ user }) => {
                 authorization(localStorage.getItem("token"))
             );
             setIsFriend(false);
+        } catch (err) {
+        }
+    }
+
+    const handleToggleBlock = async () => {
+        const confirmationMessage = isBlocked
+            ? "Are you sure you want to unlock this user?"
+            : "Are you sure you want to block this user?";
+        if (!window.confirm(confirmationMessage)) {
+            return;
+        }
+
+        try {
+            await axios.put(
+                `${baseUrl}/user/${user.userId}/toggle-block`,
+                null,
+                authorization(localStorage.getItem("token"))
+            );
+            setIsBlocked(!isBlocked);
         } catch (err) {
         }
     }
@@ -78,6 +99,9 @@ const UserComponent = ({ user }) => {
             )}
             {!isInvited && !isFriend && (
                 <button onClick={handleAddFriend} className={`${classes["user-button"]} ${classes["user-button-accept"]}`}>Add</button>
+            )}
+            {canBlock && (
+                <button onClick={handleToggleBlock} className={`${classes["user-button"]} ${classes["user-button-block"]} ${isBlocked ? classes["user-button-accept"] : classes["user-button-delete"]}`}>{isBlocked ? "Unlock" : "Block"}</button>
             )}
         </div>
     );

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetworkBackend.Application.Requests.PostRequests.AddComment;
 using SocialNetworkBackend.Application.Requests.PostRequests.CreatePost;
+using SocialNetworkBackend.Application.Requests.PostRequests.DeleteComment;
+using SocialNetworkBackend.Application.Requests.PostRequests.DeletePost;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetComments;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPostPhoto;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPosts;
@@ -89,5 +91,23 @@ public class PostController : ControllerBase
     {
         var result = await _mediator.Send(new GetUsersPostsRequest { UserId = userId } );
         return Ok(result);
+    }
+
+    [HttpDelete("{postId}")]
+    public async Task<IActionResult> DeletePost([FromRoute] long postId)
+    {
+        var request = new DeletePostRequest { PostId = postId };
+
+        await _mediator.Send(request);
+        return Ok();
+    }
+
+    [HttpDelete("{postId}/comments/{commentId}")]
+    public async Task<IActionResult> DeleteComment([FromRoute] long postId, [FromRoute] long commentId)
+    {
+        var request = new DeleteCommentRequest { PostId = postId, CommentId = commentId };
+
+        await _mediator.Send(request);
+        return Ok();
     }
 }

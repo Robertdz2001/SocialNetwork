@@ -14,6 +14,8 @@ function UserDetailsPage() {
     const { id } = useParams();
     const [isFriend, setIsFriend] = useState(null);
     const [isInvited, setIsInvited] = useState(null);
+    const [isBlocked, setIsBlocked] = useState(null);
+    const [canBlock, setCanBlock] = useState(null);
     const [chosenNav, setChosenNav] = useState('Users');
     const [userData, setUserData] = useState(null);
     const [userPosts, setUserPosts] = useState(null);
@@ -32,6 +34,8 @@ function UserDetailsPage() {
                 setUserPosts(responsePosts.data);
                 setIsFriend(response.data.isFriend);
                 setIsInvited(response.data.isInvited);
+                setIsBlocked(response.data.isBlocked);
+                setCanBlock(response.data.canBlockUser);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -60,6 +64,25 @@ function UserDetailsPage() {
                 authorization(localStorage.getItem("token"))
             );
             setIsFriend(false);
+        } catch (err) {
+        }
+    }
+
+    const handleToggleBlock = async () => {
+        const confirmationMessage = isBlocked
+            ? "Are you sure you want to unlock this user?"
+            : "Are you sure you want to block this user?";
+        if (!window.confirm(confirmationMessage)) {
+            return;
+        }
+
+        try {
+            await axios.put(
+                `${baseUrl}/user/${userData.id}/toggle-block`,
+                null,
+                authorization(localStorage.getItem("token"))
+            );
+            setIsBlocked(!isBlocked);
         } catch (err) {
         }
     }
@@ -93,8 +116,8 @@ function UserDetailsPage() {
                             {userData.firstName} {userData.lastName}
                         </div>
                         <div className={`${fonts["font-grey-medium"]} d-flex justify-content-center flex-column ms-4`}>
-                            <p className={`${classes['user-details-margin']}`}>{userData.country}</p>
-                            <p className={`${classes['user-details-margin']}`}>{userData.city}</p>
+                            <p className={`${classes['user-details-margin']} text-truncate`}>{userData.country}</p>
+                            <p className={`${classes['user-details-margin']} text-truncate`}>{userData.city}</p>
                             <div className='d-flex align-items-center'>
                                 <FontAwesomeIcon icon={faPhone} className={icons.icon} />
                                 <p className="ms-2 m-0">{userData.phoneNumber}</p>
@@ -110,6 +133,9 @@ function UserDetailsPage() {
                                 )}
                                 {!isInvited && !isFriend && (
                                     <button onClick={handleAddFriend} className={`${classes["user-button"]} ${classes["user-button-accept"]}`}>Add</button>
+                                )}
+                                {canBlock && (
+                                    <button onClick={handleToggleBlock} className={`${classes["user-button"]} ${classes["user-button-block"]} ${isBlocked ? classes["user-button-accept"] : classes["user-button-delete"]}`}>{isBlocked ? "Unlock" : "Block"}</button>
                                 )}
                             </>
                         )}

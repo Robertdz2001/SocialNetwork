@@ -79,7 +79,8 @@ public class DbContextConfiguration :
         builder
             .HasOne(x => x.Post)
             .WithOne(x => x.Photo)
-            .HasForeignKey<Photo>(x => x.PostId);
+            .HasForeignKey<Photo>(x => x.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     public void Configure(EntityTypeBuilder<FriendInvite> builder)

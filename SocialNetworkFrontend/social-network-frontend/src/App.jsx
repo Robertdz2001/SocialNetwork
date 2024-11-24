@@ -12,6 +12,7 @@ import { baseUrl, authorization } from "./Shared/Options/ApiOptions";
 import FriendInvitesPage from "./FriendInvites/FriendInvitesPage";
 import MutualFriendsPage from "./MutualFriends/MutualFriendsPage";
 import UserDetailsPage from "./Users/UserDetails/UserDetailsPage";
+import EditUserPage from "./Users/EditUser/EditUserPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -78,6 +79,10 @@ function App() {
           <Route
             path="/users/:id"
             element={isAuthenticated ? <UserDetailsPage /> : <Navigate to="/auth" replace />}
+          />
+          <Route
+            path="/edit"
+            element={isAuthenticated ? <EditUserPage /> : <Navigate to="/auth" replace />}
           />
         </Route>
 

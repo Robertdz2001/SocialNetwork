@@ -6,16 +6,36 @@ import icons from '../../../icons.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const CommentComponent = ({ comment }) => {
+const CommentComponent = ({ comment, postId, handleRefresh }) => {
     const navigate = useNavigate();
-    
+
     const handleNavigateToUserDetails = () => {
         navigate(`/users/${comment.userId}`);
     };
 
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this comment?")) {
+            return;
+        }
+
+        try {
+            await axios.delete(
+                `${baseUrl}/post/${postId}/comments/${comment.commentId}`,
+                authorization(localStorage.getItem("token"))
+            );
+            handleRefresh();
+        } catch (error) {
+            alert(error.response.data);
+        }
+    }
+
     return (
-        <div key={comment.commentId} className='mb-5'>
+        <div key={comment.commentId} className={`${classes['comment-item']} mb-5`}>
+            {comment.canDelete && (
+                <button onClick={handleDelete} className={`${classes["comment-button"]} ${classes["comment-button-delete"]}`}>Delete</button>
+            )}
             <div className='d-flex align-items-center justify-content-between mb-2 me-3'>
                 <div className='d-flex align-items-center'>
                     <div className='ms-2'>

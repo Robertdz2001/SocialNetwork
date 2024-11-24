@@ -36,6 +36,11 @@ public class LoginUserRequestHandler : IRequestHandler<LoginUserRequest>
             throw new BadRequestException($"Invalid email or password");
         }
 
+        if (user.IsBlocked) 
+        { 
+            throw new UnauthorizedException("Your account is blocked");
+        }
+
         var tokenValue = new Random().Next(10000, 99999).ToString();
 
         var token = new VerificationToken()

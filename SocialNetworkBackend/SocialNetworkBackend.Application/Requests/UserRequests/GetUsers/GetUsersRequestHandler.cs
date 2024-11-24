@@ -2,6 +2,7 @@
 using SocialNetworkBackend.Application.Pagination;
 using SocialNetworkBackend.Application.Repositories;
 using SocialNetworkBackend.Application.Services;
+using SocialNetworkBackend.Domain.Enums;
 using SocialNetworkBackend.Shared.Exceptions;
 
 namespace SocialNetworkBackend.Application.Requests.UserRequests.GetUsers;
@@ -60,7 +61,9 @@ public class GetUsersRequestHandler : IRequestHandler<GetUsersRequest, PagedResu
             City = x.City,
             IsFriend = loggedUser.Friends.FirstOrDefault(y =>  y.Id == x.Id) is not null,
             IsInvited = loggedUser.SentFriendInvites.FirstOrDefault(y => y.ReceiverId == x.Id) is not null,
-            FriendsCount = x.Friends.Count
+            FriendsCount = x.Friends.Count,
+            IsBlocked = x.IsBlocked,
+            CanBlockUser = loggedUser.RoleId == (long)UserRoles.Admin
         }).ToList();
 
         var pagedResult = new PagedResult<GetUsersDto>(usersDto, usersDto.Count, pageSize, request.PageNumber);

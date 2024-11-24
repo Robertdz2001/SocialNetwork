@@ -24,6 +24,7 @@ public class UserRepository : IUserRepository
     public async Task<User?> GetUserById(long id)
     => await _dbContext.Users
         .Include(x => x.Role)
+        .Include(x => x.Photo)
         .Include(x => x.Friends)
         .Include(x => x.SentFriendInvites)
             .ThenInclude(x => x.Receiver)

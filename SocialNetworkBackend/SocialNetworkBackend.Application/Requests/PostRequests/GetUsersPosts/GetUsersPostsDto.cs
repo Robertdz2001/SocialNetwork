@@ -19,4 +19,6 @@ public class GetUsersPostsDto
     public bool IsLiked { get; set; }
 
     public int CommentsCount { get; set; }
+
+    public bool CanDelete {  get; set; }
 }

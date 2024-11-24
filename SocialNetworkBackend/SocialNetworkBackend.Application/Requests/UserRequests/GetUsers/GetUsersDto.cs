@@ -17,4 +17,8 @@ public class GetUsersDto
     public bool IsInvited { get; set; }
 
     public long FriendsCount { get; set; }
+
+    public bool IsBlocked {  get; set; }
+
+    public bool CanBlockUser {  get; set; }
 }

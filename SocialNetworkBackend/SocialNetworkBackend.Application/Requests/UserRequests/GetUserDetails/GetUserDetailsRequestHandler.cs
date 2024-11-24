@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SocialNetworkBackend.Application.Repositories;
 using SocialNetworkBackend.Application.Services;
+using SocialNetworkBackend.Domain.Enums;
 using SocialNetworkBackend.Shared.Exceptions;
 
 namespace SocialNetworkBackend.Application.Requests.UserRequests.GetUserDetails;
@@ -45,6 +46,8 @@ public class GetUserDetailsRequestHandler : IRequestHandler<GetUserDetailsReques
                 LastName = x.LastName
             }).ToList(),
             IsItMyUser = loggedUserId == user.Id,
+            IsBlocked = user.IsBlocked,
+            CanBlockUser = loggedUser.RoleId == (long)UserRoles.Admin
         };
     }
 }

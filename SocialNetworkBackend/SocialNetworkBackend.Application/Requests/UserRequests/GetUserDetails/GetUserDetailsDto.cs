@@ -26,6 +26,10 @@ public class GetUserDetailsDto
 
     public bool IsItMyUser { get; set; }
 
+    public bool IsBlocked {  get; set; }
+
+    public bool CanBlockUser {  get; set; }
+
     public class FriendDto
     {
         public long Id { get; set; }

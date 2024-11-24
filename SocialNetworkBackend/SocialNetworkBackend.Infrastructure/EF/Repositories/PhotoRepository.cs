@@ -21,4 +21,10 @@ public class PhotoRepository : IPhotoRepository
     public async Task<Photo?> GetPhotoByPostId(long postId)
         => await _dbContext.Photos
             .FirstOrDefaultAsync(x => x.PostId == postId);
+
+    public async Task Delete(Photo photo)
+    {
+        _dbContext.Photos.Remove(photo);
+        await _dbContext.SaveChangesAsync();
+    }
 }

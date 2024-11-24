@@ -181,41 +181,41 @@ function RegisterComponent(props) {
                     <form onSubmit={handleCreate} className={authClasses['auth-form']}>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="token">We have sent a verification token to the provided email. Token will expire in 30 minutes.</label>
-                            <input className={authClasses['auth-input']} type="number" id="token" name="token" placeholder="Enter token" />
+                            <input className={authClasses['auth-input']} type="number" id="token" name="token" placeholder="Enter token" required/>
                             <span ref={tokenErrRef} className={authClasses['auth-error-message']}></span>
                         </div>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="profilePicture">Profile Picture</label>
-                            <input className={authClasses['auth-input']} type="file" accept="image/jpeg,image/png,image/jpg" onChange={handleProfilePictureChange} />
+                            <input className={authClasses['auth-input']} type="file" accept="image/jpeg,image/png,image/jpg" onChange={handleProfilePictureChange} required/>
                             {picturePreview && <img src={picturePreview} alt="Profile Preview" className={authClasses['profile-preview']} />}
                         </div>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="password">Password</label>
-                            <input className={authClasses['auth-input']} type="password" id="password" name="password" placeholder="Enter password" />
+                            <input className={authClasses['auth-input']} type="password" id="password" name="password" placeholder="Enter password" required/>
                             <span ref={passwordErrRef} className={authClasses['auth-error-message']}></span>
                         </div>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="firstName">First name</label>
-                            <input className={authClasses['auth-input']} type="text" id="firstName" name="firstName" placeholder="Enter first name" />
+                            <input className={authClasses['auth-input']} type="text" id="firstName" name="firstName" placeholder="Enter first name" maxLength={20} required/>
                             <span ref={firstNameErrRef} className={authClasses['auth-error-message']}></span>
                         </div>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="lastName">Last name</label>
-                            <input className={authClasses['auth-input']} type="text" id="lastName" name="lastName" placeholder="Enter last name" />
+                            <input className={authClasses['auth-input']} type="text" id="lastName" name="lastName" placeholder="Enter last name" maxLength={20} required/>
                             <span ref={lastNameErrRef} className={authClasses['auth-error-message']}></span>
                         </div>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="phoneNumber">Phone number</label>
-                            <input className={authClasses['auth-input']} type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" />
+                            <input className={authClasses['auth-input']} type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" maxLength={30} required/>
                             <span ref={phoneErrRef} className={authClasses['auth-error-message']}></span>
                         </div>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="country">Country</label>
-                            <input className={authClasses['auth-input']} type="text" id="country" name="country" placeholder="Enter country" />
+                            <input className={authClasses['auth-input']} type="text" id="country" name="country" placeholder="Enter country" maxLength={30} required/>
                         </div>
                         <div className={authClasses['auth-input-group']}>
                             <label className={authClasses['auth-label']} htmlFor="city">City</label>
-                            <input className={authClasses['auth-input']} type="text" id="city" name="city" placeholder="Enter city" />
+                            <input className={authClasses['auth-input']} type="text" id="city" name="city" placeholder="Enter city" maxLength={30} required/>
                         </div>
                         <div className='row justify-content-between'>
                             <div className='col-5'>

@@ -59,6 +59,11 @@ const PostComponent = ({ handlePostRefresh, post }) => {
         fetchComments();
     }, [triggerEffect]);
 
+    const handleRefresh = () => {
+        handlePostRefresh();
+        setTriggerEffect(prev => !prev);
+    }
+
     const handleAddComment = async () => {
         try {
             var token = localStorage.getItem('token');
@@ -79,13 +84,32 @@ const PostComponent = ({ handlePostRefresh, post }) => {
         }
     };
 
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this post?")) {
+            return;
+        }
+
+        try {
+            await axios.delete(
+                `${baseUrl}/post/${post.postId}`,
+                authorization(localStorage.getItem("token"))
+            );
+            handlePostRefresh();
+        } catch (error) {
+            alert(error.response.data);
+        }
+    }
+
     if (!comments) {
         return <div>Loading...</div>
     }
 
     return (
         <>
-            <div key={post.postId} className={`${classes["post-item"]} mb-5`}>
+            <div key={post.postId} className={`${classes["post-item"]} mb-5 ${post.canDelete ? "pt-5" : ""}`}>
+                {post.canDelete && (
+                    <button onClick={handleDelete} className={`${classes["post-button"]} ${classes["post-button-delete"]}`}>Delete</button>
+                )}
                 <div className='d-flex align-items-center justify-content-between'>
                     <div className='d-flex align-items-center'>
                         <div className='ms-2'>
@@ -144,7 +168,7 @@ const PostComponent = ({ handlePostRefresh, post }) => {
                         </div>
                         <div className={classes['post-comments-container']}>
                             {comments.map(comment => (
-                                <CommentComponent comment={comment}/>
+                                <CommentComponent key={comment.commentId} comment={comment} postId={post.postId} handleRefresh={handleRefresh} />
                             ))}
                         </div>
                         <div className='d-flex justify-content-between'>
@@ -152,7 +176,7 @@ const PostComponent = ({ handlePostRefresh, post }) => {
                                 type="text"
                                 name="commentContent"
                                 placeholder="Comment"
-                                maxLength={100}
+                                maxLength={300}
                                 className={classes["post-input"]}
                                 value={commentContent}
                                 onChange={(e) => setCommentContent(e.target.value)}

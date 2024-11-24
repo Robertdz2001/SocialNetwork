@@ -5,7 +5,7 @@ import icons from './Shared/icons.module.scss'
 import { baseUrl, authorization } from './Shared/Options/ApiOptions';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { faHouse, faPlus, faRightFromBracket, faUser, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faHouse, faPlus, faRightFromBracket, faUser, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { faRocketchat } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -40,6 +40,10 @@ const Layout = ({ isAuthenticated }) => {
         window.location.reload();
     }
 
+    const handleEditButton = () => {
+        navigate('/edit');
+    }
+
     if (!userData) {
         return <div>Loading...</div>;
     }
@@ -49,6 +53,7 @@ const Layout = ({ isAuthenticated }) => {
             <header className={`${classes.header} d-flex align-items-center justify-content-between`}>
                 <div className='m-0'>Social Network</div>
                 <div className='m-0 d-flex g-2 align-item-center'>
+                    <button onClick={handleEditButton} className='ms-3'><FontAwesomeIcon icon={faGear} className={`${icons.icon} ${icons["log-out-button"]} me-2`} /></button>
                     <img src={`${baseUrl}/user/${userData.userId}/profile-picture`} alt="Profile" className={classes['profile-picture']} />
                     <div className='ms-2'>{userData.firstName} {userData.lastName}</div>
                     <button onClick={handleLogOut} className='ms-3'><FontAwesomeIcon icon={faRightFromBracket} className={`${icons.icon} ${icons["log-out-button"]}`} /></button>
