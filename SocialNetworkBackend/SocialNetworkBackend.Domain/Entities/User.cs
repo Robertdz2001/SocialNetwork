@@ -38,5 +38,9 @@ public class User
 
     public List<Chat> ChatsAsUser2 { get; set; } = new();
 
-    public bool IsBlocked {  get; set; }
+    public List<Group> Groups { get; set; } = new();
+
+    public List<GroupInvite> GroupInvites { get; set; } = new();
+
+    public bool IsBlocked { get; set; }
 }

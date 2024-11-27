@@ -11,4 +11,7 @@ public class Photo
 
     public long? PostId { get; set; }
     public Post? Post { get; set; }
+
+    public long? GroupId { get; set; }
+    public Group? Group { get; set; }
 }

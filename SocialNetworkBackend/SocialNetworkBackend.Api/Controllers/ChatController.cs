@@ -10,6 +10,7 @@ using SocialNetworkBackend.Application.Requests.ChatRequests.SendMessage;
 namespace SocialNetworkBackend.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/chat")]
 public class ChatController : ControllerBase
 {
@@ -23,7 +24,6 @@ public class ChatController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> GetChats()
     {
         var result = await _mediator.Send(new GetChatsRequest());
@@ -31,7 +31,6 @@ public class ChatController : ControllerBase
     }
 
     [HttpGet("{id}/messages")]
-    [Authorize]
     public async Task<IActionResult> GetChatsMessages([FromRoute] long id)
     {
         var result = await _mediator.Send(new GetChatsMessagesRequest { Id = id });
@@ -39,7 +38,6 @@ public class ChatController : ControllerBase
     }
 
     [HttpPost("{id}/messages")]
-    [Authorize]
     public async Task<IActionResult> SendMessage([FromRoute] long id, [FromBody] string content)
     {
         await _mediator.Send(new SendMessageRequest { Id = id, Content = content });

@@ -19,4 +19,8 @@ public class Post
     public List<UserLike> UserLikes { get; set; }
 
     public List<UserComment> UserComments { get; set; }
+
+    public long? GroupId { get; set; }
+
+    public Group? Group { get; set; }
 }

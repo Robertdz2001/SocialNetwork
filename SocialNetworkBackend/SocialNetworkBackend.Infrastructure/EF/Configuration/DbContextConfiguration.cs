@@ -19,7 +19,9 @@ public class DbContextConfiguration :
     IEntityTypeConfiguration<UserLike>,
     IEntityTypeConfiguration<UserComment>,
     IEntityTypeConfiguration<Chat>,
-    IEntityTypeConfiguration<Message>
+    IEntityTypeConfiguration<Message>,
+    IEntityTypeConfiguration<Group>,
+    IEntityTypeConfiguration<GroupInvite>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -178,6 +180,55 @@ public class DbContextConfiguration :
             .WithMany()
             .HasForeignKey(m => m.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+    }
+
+    public void Configure(EntityTypeBuilder<Group> builder)
+    {
+        builder
+            .HasKey(x => x.Id);
+
+        builder
+            .HasOne(u => u.Owner)
+            .WithMany()
+            .HasForeignKey(u => u.OwnerId);
+
+        builder
+            .HasOne(u => u.Photo)
+            .WithOne(x => x.Group)
+            .HasForeignKey<Group>(u => u.PhotoId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany(u => u.Members)
+            .WithMany(x => x.Groups);
+
+        builder
+            .HasMany(u => u.GroupInvites)
+            .WithOne(x => x.Group)
+            .HasForeignKey(x => x.GroupId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany(u => u.Posts)
+            .WithOne(x => x.Group)
+            .HasForeignKey(x => x.GroupId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    public void Configure(EntityTypeBuilder<GroupInvite> builder)
+    {
+        builder
+            .HasKey(x => x.Id);
+        builder
+            .HasOne(x => x.Group)
+            .WithMany(x => x.GroupInvites)
+            .HasForeignKey(x => x.GroupId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder
+            .HasOne(x => x.Receiver)
+            .WithMany(x => x.GroupInvites)
+            .HasForeignKey(x => x.ReceiverId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private IEnumerable<Role> GetRoles()

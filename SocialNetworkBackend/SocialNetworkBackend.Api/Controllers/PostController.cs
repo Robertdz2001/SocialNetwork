@@ -14,6 +14,7 @@ using SocialNetworkBackend.Application.Requests.PostRequests.TogglePostLike;
 namespace SocialNetworkBackend.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/post")]
 public class PostController : ControllerBase
 {
@@ -37,7 +38,6 @@ public class PostController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> GetPosts([FromQuery] GetPostsRequest request)
     {
         var result = await _mediator.Send(request);
@@ -86,7 +86,6 @@ public class PostController : ControllerBase
     }
 
     [HttpGet("user/{userId}")]
-    [Authorize]
     public async Task<IActionResult> GetUsersPosts([FromRoute] long userId)
     {
         var result = await _mediator.Send(new GetUsersPostsRequest { UserId = userId } );

@@ -8,5 +8,7 @@ public interface IPhotoRepository
 
     Task<Photo?> GetPhotoByPostId(long postId);
 
+    Task<Photo?> GetPhotoByGroupId(long groupId);
+
     Task Delete(Photo photo);
 }

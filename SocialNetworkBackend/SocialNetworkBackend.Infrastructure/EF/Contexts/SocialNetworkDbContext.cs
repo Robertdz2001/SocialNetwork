@@ -26,6 +26,10 @@ public class SocialNetworkDbContext : DbContext
 
     public DbSet<Message> Messages { get; set; }
 
+    public DbSet<Group> Groups { get; set; }
+
+    public DbSet<GroupInvite> GroupInvites { get; set; }
+
     public SocialNetworkDbContext(DbContextOptions<SocialNetworkDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,5 +45,7 @@ public class SocialNetworkDbContext : DbContext
         modelBuilder.ApplyConfiguration<UserComment>(configuration);
         modelBuilder.ApplyConfiguration<Chat>(configuration);
         modelBuilder.ApplyConfiguration<Message>(configuration);
+        modelBuilder.ApplyConfiguration<Group>(configuration);
+        modelBuilder.ApplyConfiguration<GroupInvite>(configuration);
     }
 }

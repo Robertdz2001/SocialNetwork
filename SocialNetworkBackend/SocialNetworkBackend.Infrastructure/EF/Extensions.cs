@@ -24,6 +24,7 @@ public static class Extensions
         services.AddScoped<IPhotoRepository, PhotoRepository>();
         services.AddScoped<IPostRepository, PostRepository>();
         services.AddScoped<IChatRepository, ChatRepository>();
+        services.AddScoped<IGroupRepository, GroupRepository>();
         return services;
     }
 }
