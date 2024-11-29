@@ -9,7 +9,7 @@ public class GetGroupsRequest : IRequest<PagedResult<GetGroupsDto>>
 
     public bool ShowOnlyWhereIsOwner {  get; set; }
 
-    public string Name {  get; set; }
+    public string? Name {  get; set; }
 
     public int PageNumber { get; set; } = 1;
 }

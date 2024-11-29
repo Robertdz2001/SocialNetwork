@@ -45,6 +45,7 @@ public class PostController : ControllerBase
     }
 
     [HttpGet("{postId}/photo")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPostPhoto([FromRoute] long postId)
     {
         var request = new GetPostPhotoRequest { PostId = postId };

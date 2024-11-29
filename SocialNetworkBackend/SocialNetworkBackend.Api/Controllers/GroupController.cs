@@ -34,6 +34,7 @@ public class GroupController : ControllerBase
     }
 
     [HttpGet("{groupId}/photo")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetGroupPhoto([FromRoute] long groupId)
     {
         var request = new GetGroupPhotoRequest { GroupId = groupId };

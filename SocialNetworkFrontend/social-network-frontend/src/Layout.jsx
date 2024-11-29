@@ -100,6 +100,14 @@ const Layout = ({ isAuthenticated }) => {
                         Mutual Friends
                     </div>
                 </Link>
+                <Link to="/groups" className={`${classes["nav-link"]} d-flex align-item-center`}>
+                    <div>
+                        <FontAwesomeIcon icon={faUserGroup} className={icons.icon} />
+                    </div>
+                    <div className='ms-2'>
+                        Groups
+                    </div>
+                </Link>
             </nav>
             <main className={classes.content}>
                 <Outlet />

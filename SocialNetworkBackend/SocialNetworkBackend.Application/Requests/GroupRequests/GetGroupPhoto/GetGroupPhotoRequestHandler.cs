@@ -6,22 +6,22 @@ namespace SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupPhoto;
 
 public class GetGroupPhotoRequestHandler : IRequestHandler<GetGroupPhotoRequest, GetGroupPhotoDto>
 {
-    private readonly IPhotoRepository _photoRepository;
+    private readonly IGroupRepository _groupRepository;
 
-    public GetGroupPhotoRequestHandler(IPhotoRepository photoRepository)
+    public GetGroupPhotoRequestHandler(IGroupRepository groupRepository)
     {
-        _photoRepository = photoRepository;
+        _groupRepository = groupRepository;
     }
 
     public async Task<GetGroupPhotoDto> Handle(GetGroupPhotoRequest request, CancellationToken cancellationToken)
     {
-        var photo = await _photoRepository.GetPhotoByGroupId(request.GroupId)
-            ?? throw new NotFoundException("Photo was not found");
+        var group = await _groupRepository.GetGroupById(request.GroupId)
+            ?? throw new NotFoundException("Group was not found");
 
         return new GetGroupPhotoDto
         {
-            ContentType = photo.ContentType,
-            Data = photo.Data
+            ContentType = group.Photo.ContentType,
+            Data = group.Photo.Data
         };
     }
 }

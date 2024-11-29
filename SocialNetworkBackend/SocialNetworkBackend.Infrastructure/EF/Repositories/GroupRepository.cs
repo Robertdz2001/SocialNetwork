@@ -20,6 +20,13 @@ public class GroupRepository : IGroupRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<Group?> GetGroupById(long groupId)
+    {
+        return await _dbContext.Groups
+            .Include(x => x.Photo)
+            .FirstOrDefaultAsync(x => x.Id == groupId);
+    }
+
     public async Task<List<Group>> GetGroups()
         => await _dbContext.Groups
             .Include(x => x.Owner)

@@ -83,6 +83,11 @@ public class DbContextConfiguration :
             .WithOne(x => x.Photo)
             .HasForeignKey<Photo>(x => x.PostId)
             .OnDelete(DeleteBehavior.Cascade);
+        builder
+            .HasOne(x => x.Group)
+            .WithOne(x => x.Photo)
+            .HasForeignKey<Photo>(x => x.GroupId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     public void Configure(EntityTypeBuilder<FriendInvite> builder)

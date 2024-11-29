@@ -129,7 +129,6 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    [Authorize]
     [HttpGet("{userId}/profile-picture")]
     public async Task<IActionResult> GetProfilePicture([FromRoute] long userId)
     {

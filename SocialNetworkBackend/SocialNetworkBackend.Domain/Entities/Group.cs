@@ -18,7 +18,7 @@ public class Group
 
     public List<GroupInvite> GroupInvites { get; set; } = new();
 
-    public long PhotoId { get; set; }
+    public long? PhotoId { get; set; }
 
-    public Photo Photo { get; set; }
+    public Photo? Photo { get; set; }
 }
