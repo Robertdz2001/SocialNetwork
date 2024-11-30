@@ -5,6 +5,8 @@ import { baseUrl, authorization } from "../../Shared/Options/ApiOptions.js";
 import classes from './UserDetailsPage.module.scss';
 import fonts from '../../Shared/fonts.module.scss';
 import icons from '../../Shared/icons.module.scss';
+import authClasses from '../../Authentication/AuthenticationPage.module.scss';
+import modalClasses from '../../Shared/modals.module.scss';
 import { faPager, faPhone, faUser, faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserShortInfoComponent from "./Components/UserShortInfoComponent/UserShortInfoComponent.jsx";
@@ -21,6 +23,8 @@ function UserDetailsPage() {
     const [userPosts, setUserPosts] = useState(null);
     const userNavRef = useRef(null);
     const postNavRef = useRef(null);
+    const [groupsForInvite, setGroupsForInvite] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [triggerEffect, setTriggerEffect] = useState(false);
 
 
@@ -42,6 +46,30 @@ function UserDetailsPage() {
         };
         fetchUserData();
     }, [id, triggerEffect]);
+
+    const fetchGroupsForInvite = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/group/groups-for-invite/${id}`, authorization(localStorage.getItem("token")));
+            setGroupsForInvite(response.data);
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error("Error fetching groups for invite:", error);
+        }
+    };
+
+    const handleInviteToGroup = async (groupId) => {
+        try {
+            await axios.put(
+                `${baseUrl}/group/${groupId}/invite/${id}`,
+                null,
+                authorization(localStorage.getItem("token"))
+            );
+            alert("User invited to the group successfully!");
+            setGroupsForInvite(prevGroups => prevGroups.filter(group => group.id !== groupId));
+        } catch (err) {
+            alert("Failed to invite user to the group.");
+        }
+    };
 
     const handleAddFriend = async () => {
         try {
@@ -112,7 +140,7 @@ function UserDetailsPage() {
                             src={`${baseUrl}/user/${userData.id}/profile-picture`}
                             alt="Profile"
                             className={classes['user-details-profile-picture']} />
-                        <div className={`${fonts["font-green-large"]} ${classes['user-details-border']} d-flex align-items-center ms-4`}>
+                        <div className={`${fonts["font-green-large"]} d-flex align-items-center ms-4`}>
                             {userData.firstName} {userData.lastName}
                         </div>
                         <div className={`${fonts["font-grey-medium"]} d-flex justify-content-center flex-column ms-4`}>
@@ -137,6 +165,7 @@ function UserDetailsPage() {
                                 {canBlock && (
                                     <button onClick={handleToggleBlock} className={`${classes["user-button"]} ${classes["user-button-block"]} ${isBlocked ? classes["user-button-accept"] : classes["user-button-delete"]}`}>{isBlocked ? "Unlock" : "Block"}</button>
                                 )}
+                                <button onClick={fetchGroupsForInvite} className={classes["invite-user-button"]}>Invite to group</button>
                             </>
                         )}
                     </div>
@@ -164,6 +193,32 @@ function UserDetailsPage() {
                 </div>
             ) : (
                 <p>Loading user data...</p>
+            )}
+            {isModalOpen && (
+                <div className={modalClasses['modal']}>
+                    <div className={modalClasses['modal-content']}>
+                        <div className="d-flex align-items-center mb-4 justify-content-between">
+                            <h2 className={`${authClasses['auth-header']} m-0`}>Invite to group</h2>
+                            <button className={classes.closeModal} onClick={() => setIsModalOpen(false)}>X</button>
+                        </div>
+                        <ul className={classes['group-container']}>
+                            {groupsForInvite.map(group => (
+                                <li key={group.id} className="d-flex justify-content-between align-items-center mb-3">
+                                    <img
+                                        src={`${baseUrl}/group/${group.id}/photo`}
+                                        alt="Profile"
+                                        className={classes['user-details-group-photo']} />
+                                    <span className={fonts['font-green-medium']}>{group.name}</span>
+                                    <button
+                                        className={classes["invite-button"]}
+                                        onClick={() => handleInviteToGroup(group.id)}>
+                                        Invite
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
             )}
         </div>
     );

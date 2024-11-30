@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SocialNetworkBackend.Application.Requests.GroupRequests.AnswerInviteToGroup;
 using SocialNetworkBackend.Application.Requests.GroupRequests.CreateGroup;
 using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupPhoto;
 using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroups;
+using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupsForInvite;
+using SocialNetworkBackend.Application.Requests.GroupRequests.InviteToGroup;
 
 namespace SocialNetworkBackend.Api.Controllers;
 
@@ -41,5 +44,26 @@ public class GroupController : ControllerBase
 
         var result = await _mediator.Send(request);
         return File(result.Data, result.ContentType);
+    }
+
+    [HttpGet("groups-for-invite/{userId}")]
+    public async Task<IActionResult> GetGroupsForInvite([FromRoute] long userId)
+    {
+        var result = await _mediator.Send(new GetGroupsForInviteRequest { UserId = userId });
+        return Ok(result);
+    }
+
+    [HttpPut("{groupId}/invite/{userId}")]
+    public async Task<IActionResult> InviteToGroup([FromRoute] long groupId, [FromRoute] long userId)
+    {
+        await _mediator.Send(new InviteToGroupRequest { UserId = userId, GroupId = groupId });
+        return Ok();
+    }
+
+    [HttpPut("answer-invite")]
+    public async Task<IActionResult> AnswerInviteToGroup(AnswerInviteToGroupRequest request)
+    {
+        await _mediator.Send(request);
+        return Ok();
     }
 }

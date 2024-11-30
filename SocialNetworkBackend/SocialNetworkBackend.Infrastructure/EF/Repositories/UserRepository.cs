@@ -34,6 +34,8 @@ public class UserRepository : IUserRepository
         .ThenInclude(x => x.User2)
         .Include(x => x.ChatsAsUser2)
         .ThenInclude(x => x.User1)
+        .Include(x => x.Groups)
+        .Include(x => x.GroupInvites)
         .FirstOrDefaultAsync(x => x.Id == id);
 
     public async Task DeleteUser(long id)
