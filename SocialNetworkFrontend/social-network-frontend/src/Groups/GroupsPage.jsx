@@ -49,11 +49,12 @@ const GroupsPage = () => {
 
     useEffect(() => {
         fetchGroups(pageNumber, filters);
-    }, [pageNumber, filters]);
+    }, [pageNumber]);
 
     const handleSearch = (e) => {
         e.preventDefault();
         setPageNumber(1);
+        fetchGroups(1, filters);
     };
 
     const handleCheckboxChange = (e) => {
@@ -120,22 +121,26 @@ const GroupsPage = () => {
                             value={filters.name}
                             onChange={handleInputChange}
                         />
-                        <label htmlFor="showOnlyWhereIsOwner">Show only owned groups</label>
-                        <input
-                            type="checkbox"
-                            name="showOnlyWhereIsOwner"
-                            checked={filters.showOnlyWhereIsOwner}
-                            className={classes["filter-input"]}
-                            onChange={handleCheckboxChange}
-                        />
-                        <label htmlFor="showOnlyWhereIsMember">Show only groups where you are a member</label>
-                        <input
-                            type="checkbox"
-                            name="showOnlyWhereIsMember"
-                            checked={filters.showOnlyWhereIsMember}
-                            className={classes["filter-input"]}
-                            onChange={handleCheckboxChange}
-                        />
+                        <div className={classes["checkbox-container"]}>
+                            <input
+                                type="checkbox"
+                                id="showOnlyWhereIsOwner"
+                                name="showOnlyWhereIsOwner"
+                                checked={filters.showOnlyWhereIsOwner}
+                                onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="showOnlyWhereIsOwner">Show only owned groups</label>
+                        </div>
+                        <div className={classes["checkbox-container"]}>
+                            <input
+                                type="checkbox"
+                                id="showOnlyWhereIsMember"
+                                name="showOnlyWhereIsMember"
+                                checked={filters.showOnlyWhereIsMember}
+                                onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="showOnlyWhereIsMember">Show only groups where you are a member</label>
+                        </div>
                     </div>
                     <div className='d-flex justify-content-end'>
                         <button className={`me-2 ${classes["create-group-button"]}`} onClick={toggleModal}>Create</button>

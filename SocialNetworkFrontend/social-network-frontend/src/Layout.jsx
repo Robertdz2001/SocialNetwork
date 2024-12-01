@@ -108,6 +108,14 @@ const Layout = ({ isAuthenticated }) => {
                         Groups
                     </div>
                 </Link>
+                <Link to="/group-invites" className={`${classes["nav-link"]} d-flex align-item-center`}>
+                    <div>
+                        <FontAwesomeIcon icon={faPlus} className={icons.icon} />
+                    </div>
+                    <div className='ms-2'>
+                        Group Invites
+                    </div>
+                </Link>
             </nav>
             <main className={classes.content}>
                 <Outlet />

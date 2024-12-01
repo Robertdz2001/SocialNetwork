@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetworkBackend.Application.Requests.GroupRequests.AnswerInviteToGroup;
 using SocialNetworkBackend.Application.Requests.GroupRequests.CreateGroup;
+using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupInvites;
 using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupPhoto;
 using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroups;
 using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupsForInvite;
 using SocialNetworkBackend.Application.Requests.GroupRequests.InviteToGroup;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetFriendInvites;
 
 namespace SocialNetworkBackend.Api.Controllers;
 
@@ -65,5 +67,13 @@ public class GroupController : ControllerBase
     {
         await _mediator.Send(request);
         return Ok();
+    }
+
+    [HttpGet("group-invites")]
+    [Authorize]
+    public async Task<IActionResult> GetGroupInvites([FromQuery] GetGroupInvitesRequest request)
+    {
+        var result = await _mediator.Send(request);
+        return Ok(result);
     }
 }

@@ -26,7 +26,7 @@ public class AnswerInviteToGroupRequestHandler : IRequestHandler<AnswerInviteToG
         var loggedUser = await _userRepository.GetUserById(loggedUserId)
             ?? throw new NotFoundException("User was not found");
 
-        var invite = loggedUser.GroupInvites.FirstOrDefault(x => x.Id == request.GroupId);
+        var invite = loggedUser.GroupInvites.FirstOrDefault(x => x.GroupId == request.GroupId);
 
         if (invite is not null)
         {
@@ -39,5 +39,7 @@ public class AnswerInviteToGroupRequestHandler : IRequestHandler<AnswerInviteToG
                 loggedUser.Groups.Add(group);
             }
         }
+
+        await _userRepository.Update(loggedUser);
     }
 }

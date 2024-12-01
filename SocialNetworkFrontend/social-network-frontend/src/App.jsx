@@ -14,6 +14,7 @@ import MutualFriendsPage from "./MutualFriends/MutualFriendsPage";
 import UserDetailsPage from "./Users/UserDetails/UserDetailsPage";
 import EditUserPage from "./Users/EditUser/EditUserPage";
 import GroupsPage from "./Groups/GroupsPage";
+import GroupInvitesPage from "./GroupInvites/GroupInvitesPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -88,6 +89,10 @@ function App() {
           <Route
             path="/groups"
             element={isAuthenticated ? <GroupsPage /> : <Navigate to="/auth" replace />}
+          />
+          <Route
+            path="/group-invites"
+            element={isAuthenticated ? <GroupInvitesPage /> : <Navigate to="/auth" replace />}
           />
         </Route>
 
