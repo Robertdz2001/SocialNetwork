@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using SocialNetworkBackend.Api.Hubs;
 using SocialNetworkBackend.Application.Requests.UserRequests.AddFriend;
 using SocialNetworkBackend.Application.Requests.UserRequests.AnswerFriendInvite;
 using SocialNetworkBackend.Application.Requests.UserRequests.BlockUser;
@@ -20,6 +22,7 @@ using SocialNetworkBackend.Application.Requests.UserRequests.UpdateMyUserDetails
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyLoginUser;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyPasswordReset;
 using SocialNetworkBackend.Application.Requests.UserRequests.VerifyRegisterUser;
+using SocialNetworkBackend.Domain.Entities;
 
 namespace SocialNetworkBackend.Api.Controllers;
 
@@ -28,10 +31,12 @@ namespace SocialNetworkBackend.Api.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IHubContext<NotificationHub, INotificationHub> _hub;
 
-    public UserController(IMediator mediator)
+    public UserController(IMediator mediator, IHubContext<NotificationHub, INotificationHub> hub)
     {
         _mediator = mediator;
+        _hub = hub;
     }
 
     /// <summary>
@@ -171,6 +176,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> AddFriend([FromRoute] long id)
     {
         await _mediator.Send(new AddFriendRequest { UserId = id});
+        await _hub.Clients.Group(id.ToString()).ReceiveFriendRequest();
         return Ok();
     }
 

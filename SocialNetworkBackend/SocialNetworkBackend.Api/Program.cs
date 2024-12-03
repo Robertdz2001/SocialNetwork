@@ -26,6 +26,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHub<ChatHub>("/chat");
+app.MapHub<NotificationHub>("/notification");
 app.UseCors("FrontEndClient");
 
 app.UseShared();
