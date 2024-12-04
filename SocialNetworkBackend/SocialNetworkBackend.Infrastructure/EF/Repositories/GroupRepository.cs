@@ -24,6 +24,7 @@ public class GroupRepository : IGroupRepository
     {
         return await _dbContext.Groups
             .Include(x => x.Photo)
+            .Include(x => x.Members)
             .FirstOrDefaultAsync(x => x.Id == groupId);
     }
 
@@ -32,4 +33,16 @@ public class GroupRepository : IGroupRepository
             .Include(x => x.Owner)
             .Include(x => x.Members)
             .ToListAsync();
+
+    public async Task DeleteGroup(Group group)
+    {
+        _dbContext.Groups.Remove(group);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateGroup(Group group)
+    {
+        _dbContext.Groups.Update(group);
+        await _dbContext.SaveChangesAsync();
+    }
 }

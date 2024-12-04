@@ -56,4 +56,14 @@ public class PostRepository : IPostRepository
         _dbContext.Posts.Remove(post);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<List<Post>> GetPostsByGroupId(long groupId)
+        => await _dbContext.Posts
+            .Include(x => x.CreatedUser)
+            .ThenInclude(x => x.Friends)
+            .Include(x => x.UserLikes)
+            .Include(x => x.UserComments)
+            .Include(x => x.Group)
+            .Where(x => x.GroupId == groupId)
+            .ToListAsync();
 }

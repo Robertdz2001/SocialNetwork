@@ -5,11 +5,15 @@ using Microsoft.AspNetCore.SignalR;
 using SocialNetworkBackend.Api.Hubs;
 using SocialNetworkBackend.Application.Requests.GroupRequests.AnswerInviteToGroup;
 using SocialNetworkBackend.Application.Requests.GroupRequests.CreateGroup;
+using SocialNetworkBackend.Application.Requests.GroupRequests.DeleteGroup;
+using SocialNetworkBackend.Application.Requests.GroupRequests.DeleteMemberFromGroup;
+using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupDetails;
 using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupInvites;
 using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupPhoto;
 using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroups;
 using SocialNetworkBackend.Application.Requests.GroupRequests.GetGroupsForInvite;
 using SocialNetworkBackend.Application.Requests.GroupRequests.InviteToGroup;
+using SocialNetworkBackend.Application.Requests.UserRequests.GetUserDetails;
 
 namespace SocialNetworkBackend.Api.Controllers;
 
@@ -79,5 +83,26 @@ public class GroupController : ControllerBase
     {
         var result = await _mediator.Send(request);
         return Ok(result);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetGroupDetails([FromRoute] long id)
+    {
+        var result = await _mediator.Send(new GetGroupDetailsRequest { Id = id });
+        return Ok(result);
+    }
+
+    [HttpDelete("{groupId}")]
+    public async Task<IActionResult> DeleteGroup([FromRoute] long groupId)
+    {
+        await _mediator.Send(new DeleteGroupRequest { Id = groupId });
+        return Ok();
+    }
+
+    [HttpDelete("{groupId}/delete-member/{memberId}")]
+    public async Task<IActionResult> DeleteMemberFromGroup([FromRoute] long groupId, [FromRoute] long memberId)
+    {
+        await _mediator.Send(new DeleteMemberFromGroupRequest { GroupId = groupId, MemberId = memberId });
+        return Ok();
     }
 }

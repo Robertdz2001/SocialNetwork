@@ -9,4 +9,8 @@ public interface IGroupRepository
     Task<List<Group>> GetGroups();
 
     Task<Group?> GetGroupById(long groupId);
+
+    Task DeleteGroup(Group group);
+
+    Task UpdateGroup(Group group);
 }

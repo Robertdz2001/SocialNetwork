@@ -15,4 +15,6 @@ public interface IPostRepository
     Task UpdatePost(Post post);
 
     Task DeletePost(Post post);
+
+    Task<List<Post>> GetPostsByGroupId(long groupId);
 }

@@ -6,6 +6,7 @@ using SocialNetworkBackend.Application.Requests.PostRequests.CreatePost;
 using SocialNetworkBackend.Application.Requests.PostRequests.DeleteComment;
 using SocialNetworkBackend.Application.Requests.PostRequests.DeletePost;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetComments;
+using SocialNetworkBackend.Application.Requests.PostRequests.GetGroupsPosts;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPostPhoto;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetPosts;
 using SocialNetworkBackend.Application.Requests.PostRequests.GetUsersPosts;
@@ -109,5 +110,12 @@ public class PostController : ControllerBase
 
         await _mediator.Send(request);
         return Ok();
+    }
+
+    [HttpGet("group/{groupId}")]
+    public async Task<IActionResult> GetGroupsPosts([FromRoute] long groupId)
+    {
+        var result = await _mediator.Send(new GetGroupsPostsRequest { GroupId = groupId });
+        return Ok(result);
     }
 }
