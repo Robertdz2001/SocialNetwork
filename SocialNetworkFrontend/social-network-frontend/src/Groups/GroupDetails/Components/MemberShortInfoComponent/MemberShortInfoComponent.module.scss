@@ -1,0 +1,39 @@
+.member-item {
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: white;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    flex-basis: 45%;
+}
+
+.member-profile-picture{
+    width: 3rem;
+    height: 3rem;
+    border: #2e7d32 1px solid;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.member-button {
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    height: 2rem;
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &-delete {
+        background-color: #ff0000;
+        &:hover {
+            background-color: #c50000;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        }
+    }
+}
