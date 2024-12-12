@@ -28,8 +28,6 @@ public class DbContextConfiguration :
         builder
             .HasKey(x => x.Id);
         builder
-            .HasData(GetUsers());
-        builder
             .HasOne(x => x.Role)
             .WithMany()
             .HasForeignKey(x => x.RoleId);
@@ -255,29 +253,5 @@ public class DbContextConfiguration :
         };
 
         return roles;
-    }
-
-    private IEnumerable<User> GetUsers()
-    {
-
-        var users = new List<User>();
-
-        for (int i = 1; i <= 30; i++)
-        {
-            users.Add(new User
-            {
-                Id = i,
-                Email = $"user{i}@gmail.com",
-                FirstName = $"FirstName{i}",
-                LastName = $"LastName{i}",
-                PhoneNumber = $"+{i}543654753",
-                Country = $"Country{i}",
-                City = $"City{i}",
-                RoleId = (long)UserRoles.User,
-                PasswordHash = "AQAAAAIAAYagAAAAEPsuyOqmTpouyfPJVn/fMBcJyimk/UZqAvH8tgBJG+xaDr3yMmCM0pxy3ex8taUY9A==" //Test!23456
-            });
-        }
-
-        return users;
     }
 }
