@@ -15,6 +15,10 @@ const Layout = ({ isAuthenticated }) => {
     const [connection, setConnection] = useState(null);
     const navigate = useNavigate();
 
+    const handleNavigateToUserDetails = () => {
+        navigate(`/users/${userData.userId}`);
+    };
+
     useEffect(() => {
         const getUserShortInfo = async () => {
             if (!isAuthenticated) {
@@ -114,6 +118,7 @@ const Layout = ({ isAuthenticated }) => {
                         />
                     </button>
                     <img
+                        onClick={handleNavigateToUserDetails}
                         src={`${baseUrl}/user/${userData.userId}/profile-picture`}
                         alt="Profile"
                         className={classes['profile-picture']}

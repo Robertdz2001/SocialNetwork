@@ -2,6 +2,7 @@
 using SocialNetworkBackend.Application.Repositories;
 using SocialNetworkBackend.Application.Requests.GroupRequests.DeleteGroup;
 using SocialNetworkBackend.Application.Services;
+using SocialNetworkBackend.Domain.Enums;
 using SocialNetworkBackend.Shared.Exceptions;
 
 namespace SocialNetworkBackend.Application.Requests.GroupRequests.DeleteMemberFromGroup;
@@ -24,10 +25,13 @@ public class DeleteMemberFromGroupRequestHandler : IRequestHandler<DeleteMemberF
         var loggedUserId = _userContextService.GetUserId()
             ?? throw new BadRequestException("User is not logged in");
 
+        var loggedUser = await _userRepository.GetUserById(loggedUserId)
+            ?? throw new NotFoundException("User was not found");
+
         var group = await _groupRepository.GetGroupById(request.GroupId)
             ?? throw new NotFoundException("Group was not found");
 
-        if (group.OwnerId != loggedUserId)
+        if (group.OwnerId != loggedUserId && loggedUser.RoleId != (long)UserRoles.Admin)
         {
             throw new UnauthorizedException("User is not owner of the group");
         }

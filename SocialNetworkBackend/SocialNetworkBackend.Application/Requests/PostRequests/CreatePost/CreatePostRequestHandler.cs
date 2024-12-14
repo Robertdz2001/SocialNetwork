@@ -2,6 +2,7 @@
 using SocialNetworkBackend.Application.Repositories;
 using SocialNetworkBackend.Application.Services;
 using SocialNetworkBackend.Domain.Entities;
+using SocialNetworkBackend.Domain.Enums;
 using SocialNetworkBackend.Shared.Exceptions;
 
 namespace SocialNetworkBackend.Application.Requests.PostRequests.CreatePost;
@@ -34,7 +35,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest>
             var group = await _groupRepository.GetGroupById(request.GroupId.Value)
                 ?? throw new NotFoundException("Group was not found");
 
-            if (!group.Members.Any(x => x.Id == loggedUserId))
+            if (!group.Members.Any(x => x.Id == loggedUserId) && loggedUser.RoleId != (long)UserRoles.Admin)
             {
                 throw new UnauthorizedException("User can not create post in this group");
             }
